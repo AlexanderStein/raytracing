@@ -76,6 +76,10 @@ impl Vec3 {
         const EPSILON: f64 = 1e-8;
         self.e[0].abs() < EPSILON && self.e[1].abs() < EPSILON && self.e[2].abs() < EPSILON
     }
+
+    pub fn reflect(&self, n: &Vec3) -> Vec3 {
+        *self - 2.0 * self.dot(n) * *n
+    }
 }
 
 impl Display for Vec3 {
