@@ -1,13 +1,14 @@
-use crate::{hitable::*, vec3::*};
+use crate::{hitable::*, vec3::*, material::Material};
 
 pub struct Sphere {
     center: Point3,
     radius: f64,
+    material: Material,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64) -> Self {
-        Self { center, radius }
+    pub fn new(center: Point3, radius: f64, material: Material) -> Self {
+        Self { center, radius, material }
     }
 }
 
@@ -36,6 +37,7 @@ impl Hittable for Sphere {
         record.p = ray.at(record.t);
         let outward_normal = (record.p - self.center) / self.radius;
         record.set_face_normal(ray, &outward_normal);
+        record.material = self.material;
         true
     }
 }
