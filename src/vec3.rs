@@ -32,6 +32,12 @@ impl Vec3 {
     pub fn length(&self) -> ElemType {
         self.length_squared().sqrt()
     }
+
+    pub fn dot(&self, v: &Vec3) -> ElemType {
+        return self.e[0] * v.e[0]
+             + self.e[1] * v.e[1]
+             + self.e[2] * v.e[2];
+    }
 }
 
 impl Display for Vec3 {
@@ -178,12 +184,6 @@ mod tests {
 pub type Point3 = Vec3;
 
 // Vector utils
-pub fn dot(u: &Vec3, v: &Vec3) -> ElemType {
-    return u.e[0] * v.e[0]
-         + u.e[1] * v.e[1]
-         + u.e[2] * v.e[2];
-}
-
 pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
     let x = u.e[1] * v.e[2] - u.e[2] * v.e[1];
     let y = u.e[2] * v.e[0] - u.e[0] * v.e[2];
