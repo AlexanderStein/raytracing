@@ -36,7 +36,7 @@ impl Ray {
         }
 
         if world.hit(self, 0.001, f64::MAX, &mut record) {
-            let target = record.p + record.normal + Vec3::random_unit_vector(rng);
+            let target = record.p + record.normal + Vec3::random_in_hemisphere(&record.normal, rng);
             let ray = Ray::new(record.p, target - record.p);
             return 0.5 * ray.color(world, depth - 1, rng);
         }

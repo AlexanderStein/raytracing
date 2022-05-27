@@ -60,6 +60,16 @@ impl Vec3 {
     pub fn random_unit_vector(rng: &mut dyn RngCore) -> Vec3 {
         Vec3::random_in_unit_sphere(rng).unit_vector()
     }
+
+    pub fn random_in_hemisphere(normal: &Vec3, rng: &mut dyn RngCore) -> Vec3 {
+        let in_unit_sphere = Vec3::random_in_unit_sphere(rng);
+        if in_unit_sphere.dot(normal) > 0.0 {
+             // In the same hemisphere as the normal
+             in_unit_sphere
+        } else {
+            -in_unit_sphere
+        }
+    }
 }
 
 impl Display for Vec3 {
