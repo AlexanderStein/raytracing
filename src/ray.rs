@@ -26,7 +26,7 @@ impl Ray {
         self.origin + t * self.direction
     }
 
-    pub fn ray_color(&self, world: &HitableList) -> Color {
+    pub fn color(&self, world: &HitableList) -> Color {
         let mut record = HitRecord::new();
         if world.hit(self, 0.0, f64::MAX, &mut record) {
             return 0.5 * (record.normal + Color::new(1.0, 1.0, 1.0));
