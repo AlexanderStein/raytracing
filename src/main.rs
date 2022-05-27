@@ -5,6 +5,7 @@ use rand::prelude::*;
 mod camera;
 mod color;
 mod hitable;
+mod material;
 mod ray;
 mod sphere;
 mod vec3;
