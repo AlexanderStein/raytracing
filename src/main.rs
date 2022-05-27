@@ -14,8 +14,8 @@ pub const ASPECT_RATIO: f64 = 16.0 / 9.0;
 
 fn main() {
     // Image
-    const IMAGE_WIDTH: u32 = 1280;
-    const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
+    const IMAGE_WIDTH: usize = 400;
+    const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
 
     // World
     let mut world = HitableList { objects: vec![] };
