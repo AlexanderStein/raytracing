@@ -28,14 +28,12 @@ impl Ray {
     }
 
     pub fn color(&self, world: &HitableList, depth: usize, rng: &mut dyn RngCore) -> Color {
-        let mut record = HitRecord::new();
-
         // If we've exceeded the ray bounce limit, no more light is gathered.
         if depth <= 0 {
             return Color::new(0.0,0.0,0.0);
         }
 
-        if world.hit(self, 0.001, f64::MAX, &mut record) {
+        if let Some(record) = world.hit(self, 0.001, f64::MAX) {
             let target = record.p + record.normal + Vec3::random_in_hemisphere(&record.normal, rng);
             let ray = Ray::new(record.p, target - record.p);
             return 0.5 * ray.color(world, depth - 1, rng);
