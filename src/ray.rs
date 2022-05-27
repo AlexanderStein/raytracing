@@ -1,5 +1,4 @@
-use crate::Color;
-use crate::vec3::{ElemType, Vec3, Point3, unit_vector};
+use crate::{Color, vec3::*};
 
 pub struct Ray {
     origin: Point3,
