@@ -29,6 +29,7 @@ impl HitRecord {
 }
 
 pub trait Hittable {
+    // TODO: record is an output only parameter, move it to return list
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool;
 }
 
