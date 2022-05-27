@@ -48,7 +48,7 @@ fn main() {
                 origin,
                 lower_left_corner + u * horizontal + v * vertical - origin,
             );
-            let pixel_color = ray.ray_color();
+            let pixel_color = ray.ray_color(&world);
             pnm_data += &pixel_color.pnm_color();
         }
     }

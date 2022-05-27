@@ -1,4 +1,8 @@
-use crate::{vec3::*, Color};
+use crate::{
+    hitable::{HitRecord, Hittable, HitableList},
+    vec3::*,
+    Color,
+};
 
 pub struct Ray {
     origin: Point3,
@@ -22,11 +26,10 @@ impl Ray {
         self.origin + t * self.direction
     }
 
-    pub fn ray_color(&self) -> Color {
-        let t = self.hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5);
-        if t > 0.0 {
-            let n = (self.at(t) - Vec3::new(0.0, 0.0, -1.0)).unit_vector();
-            return 0.5 * Color::new(n.x() + 1.0, n.y() + 1.0, n.z() + 1.0);
+    pub fn ray_color(&self, world: &HitableList) -> Color {
+        let mut record = HitRecord::new();
+        if world.hit(self, 0.0, f64::MAX, &mut record) {
+            return 0.5 * (record.normal + Color::new(1.0, 1.0, 1.0));
         }
         let unit_direction = &self.direction().unit_vector();
         let t = 0.5 * (unit_direction.y() + 1.0);
