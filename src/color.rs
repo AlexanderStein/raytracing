@@ -1,6 +1,6 @@
-use crate::*;
+use crate::vec3::Vec3;
 
-pub type Color = vec3::Vec3;
+pub type Color = Vec3;
 
 impl Color {
     // Write the translated [0,255] value of each color component.
