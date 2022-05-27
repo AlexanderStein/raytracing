@@ -33,6 +33,8 @@ fn main() {
     let mut pnm_data = String::new();
     pnm_data += &format!("P3\n{} {}\n255\n\n", IMAGE_WIDTH, IMAGE_HEIGHT);
 
+    // #TODO Use rayon for parallel iteration
+    // Speed up should be noticable with 1280 px image width
     for y in (0..IMAGE_HEIGHT).rev() {
         eprint!(
             "\rScanlines remaining: {} ({})%",
