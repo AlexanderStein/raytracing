@@ -1,5 +1,5 @@
-use std::ops;
 use std::fmt::Display;
+use std::ops;
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -7,8 +7,8 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
-    pub fn new(x: f64, y:f64, z:f64) -> Self {
-        Vec3 { e:[x, y, z] }
+    pub fn new(x: f64, y: f64, z: f64) -> Self {
+        Vec3 { e: [x, y, z] }
     }
 
     pub fn x(&self) -> f64 {
@@ -32,9 +32,7 @@ impl Vec3 {
     }
 
     pub fn dot(&self, v: &Vec3) -> f64 {
-        return self.e[0] * v.e[0]
-             + self.e[1] * v.e[1]
-             + self.e[2] * v.e[2];
+        self.e[0] * v.e[0] + self.e[1] * v.e[1] + self.e[2] * v.e[2]
     }
 
     pub fn unit_vector(&self) -> Vec3 {
@@ -110,7 +108,6 @@ impl ops::Mul<f64> for &Vec3 {
     }
 }
 
-
 impl ops::MulAssign<f64> for Vec3 {
     fn mul_assign(&mut self, rhs: f64) {
         let x = self.e[0] * rhs;
@@ -170,9 +167,9 @@ mod tests {
 
     #[test]
     fn test_add() {
-            let a = Vec3::new(1.0, 2.0, 3.0);
-            let b = Vec3::new(5.0, 8.0, 13.0);
-            let mut c = a + b;
+        let a = Vec3::new(1.0, 2.0, 3.0);
+        let b = Vec3::new(5.0, 8.0, 13.0);
+        let mut c = a + b;
         assert_eq!(c.e[0], 6.0);
         assert_eq!(c.e[1], 10.0);
         assert_eq!(c.e[2], 16.0);
@@ -192,4 +189,3 @@ pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
     let z = u.e[0] * v.e[1] - u.e[1] * v.e[0];
     Vec3::new(x, y, z)
 }
-

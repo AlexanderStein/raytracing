@@ -1,8 +1,8 @@
 use self::{color::*, ray::*, vec3::*};
 
 mod color;
-mod vec3;
 mod ray;
+mod vec3;
 
 use image::{load_from_memory_with_format, ImageFormat};
 
@@ -20,7 +20,8 @@ fn main() {
     let origin = Point3::new(0.0, 0.0, 0.0);
     let horizontal = Vec3::new(VIEWPORT_WIDTH, 0.0, 0.0);
     let vertical = Vec3::new(0.0, VIEWPORT_HEIGHT, 0.0);
-    let lower_left_corner = origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, FOCAL_LENGTH);
+    let lower_left_corner =
+        origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, FOCAL_LENGTH);
 
     // Render
     let mut pnm_data = String::new();
