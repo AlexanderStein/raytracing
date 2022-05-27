@@ -56,6 +56,10 @@ impl Vec3 {
             }
         }
     }
+
+    pub fn random_unit_vector(rng: &mut dyn RngCore) -> Vec3 {
+        Vec3::random_in_unit_sphere(rng).unit_vector()
+    }
 }
 
 impl Display for Vec3 {
