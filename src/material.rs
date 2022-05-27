@@ -1,11 +1,18 @@
-use crate::{hitable::HitRecord, vec3::*, color::Color, ray::Ray};
+use crate::{color::Color, hitable::HitRecord, ray::Ray, vec3::*};
 use rand::RngCore;
 
 #[derive(Clone)]
 pub struct Material;
 
 pub trait MaterialTrait {
-    fn scatter(&self, ray_in: &Ray, record: &HitRecord, attenuation: &mut Color, scattered: &mut Ray, rng: &mut dyn RngCore) -> bool;
+    fn scatter(
+        &self,
+        ray_in: &Ray,
+        record: &HitRecord,
+        attenuation: &mut Color,
+        scattered: &mut Ray,
+        rng: &mut dyn RngCore,
+    ) -> bool;
 }
 
 pub struct Lambertian {
@@ -13,13 +20,20 @@ pub struct Lambertian {
 }
 
 impl Lambertian {
-    pub fn new (color: &Color) -> Self {
-        Self {albedo: *color}
+    pub fn new(color: &Color) -> Self {
+        Self { albedo: *color }
     }
 }
 
 impl MaterialTrait for Lambertian {
-    fn scatter(&self, ray_in: &Ray, record: &HitRecord, attenuation: &mut Color, scattered: &mut Ray, rng: &mut dyn RngCore) -> bool {
+    fn scatter(
+        &self,
+        ray_in: &Ray,
+        record: &HitRecord,
+        attenuation: &mut Color,
+        scattered: &mut Ray,
+        rng: &mut dyn RngCore,
+    ) -> bool {
         let scatter_direction = record.normal + Vec3::random_unit_vector(rng);
 
         // Catch degenerate scatter direction
