@@ -1,6 +1,6 @@
 use crate::{hitable::*, vec3::*};
 
-struct Sphere {
+pub struct Sphere {
     center: Point3,
     radius: f64,
 }
