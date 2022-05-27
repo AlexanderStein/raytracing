@@ -70,6 +70,12 @@ impl Vec3 {
             -in_unit_sphere
         }
     }
+
+    // Return true if the vector is close to zero in all dimensions.
+    pub fn near_zero(&self) -> bool {
+        const EPSILON: f64 = 1e-8;
+        self.e[0].abs() < EPSILON && self.e[1].abs() < EPSILON && self.e[2].abs() < EPSILON
+    }
 }
 
 impl Display for Vec3 {
