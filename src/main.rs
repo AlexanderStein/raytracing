@@ -16,6 +16,7 @@ fn main() {
     // Image
     const IMAGE_WIDTH: usize = 400;
     const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
+    const SAMPLES_PER_PIXEL: usize = 1;
 
     // World
     let mut world = HitableList { objects: vec![] };
@@ -40,7 +41,7 @@ fn main() {
             let v = y as f64 / (IMAGE_HEIGHT - 1) as f64;
             let ray = camera.get_ray(u, v);
             let pixel_color = ray.color(&world);
-            pnm_data += &pixel_color.pnm_color();
+            pnm_data += &pixel_color.pnm_color(SAMPLES_PER_PIXEL);
         }
     }
     eprintln!("");
