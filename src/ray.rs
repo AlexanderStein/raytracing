@@ -18,7 +18,7 @@ impl Ray {
         self.direction
     }
 
-    pub fn at(&self, t: ElemType) -> Point3 {
+    pub fn at(&self, t: f64) -> Point3 {
         self.origin + t * self.direction
     }
 
@@ -31,7 +31,7 @@ impl Ray {
         (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
     }
 
-    pub fn hit_sphere(&self, center: &Point3, radius: ElemType) -> bool {
+    pub fn hit_sphere(&self, center: &Point3, radius: f64) -> bool {
         let oc = self.origin() - *center;
         let a = self.direction().dot(&self.direction());
         let b = 2.0 * oc.dot(&self.direction());

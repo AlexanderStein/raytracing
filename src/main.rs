@@ -8,14 +8,14 @@ use image::{load_from_memory_with_format, ImageFormat};
 
 fn main() {
     // Image
-    const ASPECT_RATIO: ElemType = 16.0 / 9.0;
+    const ASPECT_RATIO: f64 = 16.0 / 9.0;
     const IMAGE_WIDTH: u32 = 1280;
-    const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as ElemType / ASPECT_RATIO) as u32;
+    const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
 
     // Camera
-    const VIEWPORT_HEIGHT: ElemType = 2.0;
-    const VIEWPORT_WIDTH: ElemType = ASPECT_RATIO * VIEWPORT_HEIGHT;
-    const FOCAL_LENGTH: ElemType = 1.0;
+    const VIEWPORT_HEIGHT: f64 = 2.0;
+    const VIEWPORT_WIDTH: f64 = ASPECT_RATIO * VIEWPORT_HEIGHT;
+    const FOCAL_LENGTH: f64 = 1.0;
 
     let origin = Point3::new(0.0, 0.0, 0.0);
     let horizontal = Vec3::new(VIEWPORT_WIDTH, 0.0, 0.0);
@@ -33,8 +33,8 @@ fn main() {
             ((1.0 - (y as f32 / IMAGE_HEIGHT as f32)) * 100.0) as u16
         );
         for x in 0..IMAGE_WIDTH {
-            let u = x as ElemType / (IMAGE_WIDTH - 1) as ElemType;
-            let v = y as ElemType / (IMAGE_HEIGHT - 1) as ElemType;
+            let u = x as f64 / (IMAGE_WIDTH - 1) as f64;
+            let v = y as f64 / (IMAGE_HEIGHT - 1) as f64;
             let ray = Ray::new(
                 origin,
                 lower_left_corner + u * horizontal + v * vertical - origin,

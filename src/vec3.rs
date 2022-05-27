@@ -1,39 +1,37 @@
 use std::ops;
 use std::fmt::Display;
 
-pub type ElemType = f64;
-
 #[derive(Clone, Copy)]
 pub struct Vec3 {
-    e: [ElemType; 3],
+    e: [f64; 3],
 }
 
 impl Vec3 {
-    pub fn new(x: ElemType, y:ElemType, z:ElemType) -> Self {
+    pub fn new(x: f64, y:f64, z:f64) -> Self {
         Vec3 { e:[x, y, z] }
     }
 
-    pub fn x(&self) -> ElemType {
+    pub fn x(&self) -> f64 {
         self.e[0]
     }
 
-    pub fn y(&self) -> ElemType {
+    pub fn y(&self) -> f64 {
         self.e[1]
     }
 
-    pub fn z(&self) -> ElemType {
+    pub fn z(&self) -> f64 {
         self.e[2]
     }
 
-    pub fn length_squared(&self) -> ElemType {
+    pub fn length_squared(&self) -> f64 {
         self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]
     }
 
-    pub fn length(&self) -> ElemType {
+    pub fn length(&self) -> f64 {
         self.length_squared().sqrt()
     }
 
-    pub fn dot(&self, v: &Vec3) -> ElemType {
+    pub fn dot(&self, v: &Vec3) -> f64 {
         return self.e[0] * v.e[0]
              + self.e[1] * v.e[1]
              + self.e[2] * v.e[2];
@@ -86,10 +84,10 @@ impl ops::SubAssign for Vec3 {
     }
 }
 
-impl ops::Mul<ElemType> for Vec3 {
+impl ops::Mul<f64> for Vec3 {
     type Output = Vec3;
 
-    fn mul(self, rhs: ElemType) -> Self::Output {
+    fn mul(self, rhs: f64) -> Self::Output {
         let x = self.e[0] * rhs;
         let y = self.e[1] * rhs;
         let z = self.e[2] * rhs;
@@ -97,10 +95,10 @@ impl ops::Mul<ElemType> for Vec3 {
     }
 }
 
-impl ops::Mul<ElemType> for &Vec3 {
+impl ops::Mul<f64> for &Vec3 {
     type Output = Vec3;
 
-    fn mul(self, rhs: ElemType) -> Self::Output {
+    fn mul(self, rhs: f64) -> Self::Output {
         let x = self.e[0] * rhs;
         let y = self.e[1] * rhs;
         let z = self.e[2] * rhs;
@@ -109,8 +107,8 @@ impl ops::Mul<ElemType> for &Vec3 {
 }
 
 
-impl ops::MulAssign<ElemType> for Vec3 {
-    fn mul_assign(&mut self, rhs: ElemType) {
+impl ops::MulAssign<f64> for Vec3 {
+    fn mul_assign(&mut self, rhs: f64) {
         let x = self.e[0] * rhs;
         let y = self.e[1] * rhs;
         let z = self.e[2] * rhs;
@@ -118,7 +116,7 @@ impl ops::MulAssign<ElemType> for Vec3 {
     }
 }
 
-impl ops::Mul<Vec3> for ElemType {
+impl ops::Mul<Vec3> for f64 {
     type Output = Vec3;
 
     fn mul(self, rhs: Vec3) -> Self::Output {
@@ -140,24 +138,24 @@ impl ops::Mul<Self> for Vec3 {
     }
 }
 
-impl ops::Div<ElemType> for Vec3 {
+impl ops::Div<f64> for Vec3 {
     type Output = Vec3;
 
-    fn div(self, rhs: ElemType) -> Self::Output {
+    fn div(self, rhs: f64) -> Self::Output {
         self * (1.0 / rhs)
     }
 }
 
-impl ops::DivAssign<ElemType> for Vec3 {
-    fn div_assign(&mut self, rhs: ElemType) {
+impl ops::DivAssign<f64> for Vec3 {
+    fn div_assign(&mut self, rhs: f64) {
         *self *= 1.0 / rhs
     }
 }
 
-impl ops::Div<ElemType> for &Vec3 {
+impl ops::Div<f64> for &Vec3 {
     type Output = Vec3;
 
-    fn div(self, rhs: ElemType) -> Self::Output {
+    fn div(self, rhs: f64) -> Self::Output {
         self * (1.0 / rhs)
     }
 }
