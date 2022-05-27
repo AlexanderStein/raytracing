@@ -1,5 +1,6 @@
 use crate::{color::*, hitable::HitableList, ray::*, sphere::*, vec3::*, camera::Camera};
 use std::rc::Rc;
+use rand::prelude::*;
 
 mod camera;
 mod color;
@@ -13,10 +14,12 @@ use image::{load_from_memory_with_format, ImageFormat};
 pub const ASPECT_RATIO: f64 = 16.0 / 9.0;
 
 fn main() {
+    let mut rng = thread_rng();
+
     // Image
     const IMAGE_WIDTH: usize = 400;
     const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
-    const SAMPLES_PER_PIXEL: usize = 1;
+    const SAMPLES_PER_PIXEL: usize = 100;
 
     // World
     let mut world = HitableList { objects: vec![] };
@@ -37,10 +40,13 @@ fn main() {
             ((1.0 - (y as f32 / IMAGE_HEIGHT as f32)) * 100.0) as u16
         );
         for x in 0..IMAGE_WIDTH {
-            let u = x as f64 / (IMAGE_WIDTH - 1) as f64;
-            let v = y as f64 / (IMAGE_HEIGHT - 1) as f64;
-            let ray = camera.get_ray(u, v);
-            let pixel_color = ray.color(&world);
+            let mut pixel_color = Color::new(0.0, 0.0, 0.0);
+            for s in 0..SAMPLES_PER_PIXEL {
+                let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
+                let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
+                let ray = camera.get_ray(u, v);
+                pixel_color += ray.color(&world);
+            }
             pnm_data += &pixel_color.pnm_color(SAMPLES_PER_PIXEL);
         }
     }
