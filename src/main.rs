@@ -1,10 +1,11 @@
-use crate::{color::*, ray::*, vec3::*};
+use crate::{color::*, hitable::HitableList, ray::*, sphere::*, vec3::*};
+use std::rc::Rc;
 
 mod color;
 mod hitable;
 mod ray;
-mod vec3;
 mod sphere;
+mod vec3;
 
 use image::{load_from_memory_with_format, ImageFormat};
 
@@ -13,6 +14,11 @@ fn main() {
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
     const IMAGE_WIDTH: u32 = 1280;
     const IMAGE_HEIGHT: u32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as u32;
+
+    // World
+    let mut world = HitableList { objects: vec![] };
+    world.objects.push(Rc::new(Sphere::new(Point3::new(0.0, 0.0, -1.0), 0.5)));
+    world.objects.push(Rc::new(Sphere::new(Point3::new(0.0, -100.5, -1.0), 100.0)));
 
     // Camera
     const VIEWPORT_HEIGHT: f64 = 2.0;
