@@ -43,7 +43,7 @@ fn main() {
         );
         for x in 0..IMAGE_WIDTH {
             let mut pixel_color = Color::new(0.0, 0.0, 0.0);
-            for s in 0..SAMPLES_PER_PIXEL {
+            for _ in 0..SAMPLES_PER_PIXEL {
                 let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
                 let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
                 let ray = camera.get_ray(u, v);
