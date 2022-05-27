@@ -3,6 +3,7 @@ use crate::{
     vec3::*,
     Color,
 };
+use rand::RngCore;
 
 pub struct Ray {
     origin: Point3,
@@ -26,10 +27,12 @@ impl Ray {
         self.origin + t * self.direction
     }
 
-    pub fn color(&self, world: &HitableList) -> Color {
+    pub fn color(&self, world: &HitableList, rng: &mut dyn RngCore) -> Color {
         let mut record = HitRecord::new();
         if world.hit(self, 0.0, f64::MAX, &mut record) {
-            return 0.5 * (record.normal + Color::new(1.0, 1.0, 1.0));
+            let target = record.p + record.normal + Vec3::random_in_unit_sphere(rng);
+            let ray = Ray::new(record.p, target - record.p);
+            return 0.5 * ray.color(world, rng);
         }
         let unit_direction = &self.direction().unit_vector();
         let t = 0.5 * (unit_direction.y() + 1.0);
