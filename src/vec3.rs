@@ -36,6 +36,10 @@ impl Vec3 {
              + self.e[1] * v.e[1]
              + self.e[2] * v.e[2];
     }
+
+    pub fn unit_vector(&self) -> Vec3 {
+        self / self.length()
+    }
 }
 
 impl Display for Vec3 {
@@ -189,6 +193,3 @@ pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
     Vec3::new(x, y, z)
 }
 
-pub fn unit_vector(v: &Vec3) -> Vec3 {
-    return v / v.length()
-}
