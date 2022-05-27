@@ -1,4 +1,4 @@
-use rand::{RngCore, Rng};
+use rand::{Rng, RngCore};
 use std::fmt::Display;
 use std::ops;
 
@@ -64,8 +64,8 @@ impl Vec3 {
     pub fn random_in_hemisphere(normal: &Vec3, rng: &mut dyn RngCore) -> Vec3 {
         let in_unit_sphere = Vec3::random_in_unit_sphere(rng);
         if in_unit_sphere.dot(normal) > 0.0 {
-             // In the same hemisphere as the normal
-             in_unit_sphere
+            // In the same hemisphere as the normal
+            in_unit_sphere
         } else {
             -in_unit_sphere
         }
