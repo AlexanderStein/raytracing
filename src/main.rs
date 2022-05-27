@@ -4,6 +4,7 @@ mod color;
 mod hitable;
 mod ray;
 mod vec3;
+mod sphere;
 
 use image::{load_from_memory_with_format, ImageFormat};
 
