@@ -1,3 +1,4 @@
+use rand::{RngCore, Rng};
 use std::fmt::Display;
 use std::ops;
 
@@ -37,6 +38,23 @@ impl Vec3 {
 
     pub fn unit_vector(&self) -> Vec3 {
         self / self.length()
+    }
+
+    fn random(rng: &mut dyn RngCore) -> Vec3 {
+        let range = -1.0..1.0;
+        let x = rng.gen_range(range.clone());
+        let y = rng.gen_range(range.clone());
+        let z = rng.gen_range(range.clone());
+        Vec3 { e: [x, y, z] }
+    }
+
+    pub fn random_in_unit_sphere(rng: &mut dyn RngCore) -> Vec3 {
+        loop {
+            let point = Vec3::random(rng);
+            if point.length_squared() < 1.0 {
+                return point;
+            }
+        }
     }
 }
 
