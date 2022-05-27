@@ -1,6 +1,7 @@
 use crate::{color::*, ray::*, vec3::*};
 
 mod color;
+mod hitable;
 mod ray;
 mod vec3;
 
