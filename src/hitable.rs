@@ -34,7 +34,7 @@ pub trait Hittable {
 }
 
 pub struct HitableList {
-    objects: Vec<Rc<dyn Hittable>>,
+    pub objects: Vec<Rc<dyn Hittable>>,
 }
 
 impl Hittable for HitableList {
