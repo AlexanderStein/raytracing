@@ -1,4 +1,4 @@
-use self::{color::*, ray::*, vec3::*};
+use crate::{color::*, ray::*, vec3::*};
 
 mod color;
 mod ray;
