@@ -39,7 +39,7 @@ impl Ray {
             }
             return Color::new(0.0, 0.0, 0.0);
         }
-        let unit_direction = &self.direction().unit_vector();
+        let unit_direction = self.direction().unit_vector();
         let t = 0.5 * (unit_direction.y() + 1.0);
         (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
     }
