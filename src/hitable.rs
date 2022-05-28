@@ -1,11 +1,11 @@
-use crate::{ray::*, vec3::*, material::Material};
+use crate::{ray::*, vec3::*, material::MaterialTrait};
 use std::rc::Rc;
 use std::option::Option;
 
 pub struct HitRecord {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: Material,
+    pub material: Box<dyn MaterialTrait>,
     pub t: f64,
     pub front_face: bool,
 }

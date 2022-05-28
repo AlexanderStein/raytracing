@@ -1,14 +1,14 @@
-use crate::{hitable::*, vec3::*, material::Material};
+use crate::{hitable::*, vec3::*, material::MaterialTrait};
 use std::option::Option;
 
 pub struct Sphere {
     center: Point3,
     radius: f64,
-    material: Material,
+    material: Box<dyn MaterialTrait>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64, material: Material) -> Self {
+    pub fn new(center: Point3, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
         Self { center, radius, material }
     }
 }
@@ -24,7 +24,7 @@ impl Hittable for Sphere {
             return None;
         }
         let sqrtd = discriminant.sqrt();
-        
+
         // Find the nearest root that lies in the acceptable range.
         let root = (-half_b - sqrtd) / a;
         if root < t_min || t_max < root {
