@@ -5,11 +5,11 @@ use std::rc::Rc;
 pub struct Sphere {
     center: Point3,
     radius: f64,
-    material: Rc<Box<dyn MaterialTrait>>,
+    material: Rc<dyn MaterialTrait>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64, material: Rc<Box<dyn MaterialTrait>>) -> Self {
+    pub fn new(center: Point3, radius: f64, material: Rc<dyn MaterialTrait>) -> Self {
         Self {
             center,
             radius,
