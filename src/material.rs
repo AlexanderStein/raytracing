@@ -64,7 +64,10 @@ impl MaterialTrait for Metal {
         rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
         let reflected = ray_in.direction().unit_vector().reflect(&record.normal);
-        let scattered = Ray::new(record.p, reflected + self.fuzz * Vec3::random_in_unit_sphere(rng));
+        let scattered = Ray::new(
+            record.p,
+            reflected + self.fuzz * Vec3::random_in_unit_sphere(rng),
+        );
         if scattered.direction().dot(&record.normal) > 0.0 {
             Some((self.albedo, scattered))
         } else {
