@@ -34,13 +34,7 @@ impl Ray {
         }
 
         if let Some(record) = world.hit(self, 0.001, f64::MAX) {
-            let mut scattered = Ray::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 0.0));
-            let mut attenuation = Color::new(0.0, 0.0, 0.0);
-
-            if record
-                .material
-                .scatter(self, &record, &mut attenuation, &mut scattered, rng)
-            {
+            if let Some((attenuation, scattered)) = record.material.scatter(self, &record, rng) {
                 return attenuation * scattered.color(world, depth - 1, rng);
             }
             return Color::new(0.0, 0.0, 0.0);

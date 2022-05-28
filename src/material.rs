@@ -6,10 +6,8 @@ pub trait MaterialTrait {
         &self,
         ray_in: &Ray,
         record: &HitRecord,
-        attenuation: &mut Color,
-        scattered: &mut Ray,
         rng: &mut dyn RngCore,
-    ) -> bool;
+    ) -> Option<(Color, Ray)>;
 }
 
 pub struct Lambertian {
@@ -27,10 +25,8 @@ impl MaterialTrait for Lambertian {
         &self,
         _ray_in: &Ray,
         record: &HitRecord,
-        attenuation: &mut Color,
-        scattered: &mut Ray,
         rng: &mut dyn RngCore,
-    ) -> bool {
+    ) -> Option<(Color, Ray)> {
         let scatter_direction = record.normal + Vec3::random_unit_vector(rng);
 
         // Catch degenerate scatter direction
@@ -40,9 +36,8 @@ impl MaterialTrait for Lambertian {
             scatter_direction
         };
 
-        *scattered = Ray::new(record.p, scatter_direction);
-        *attenuation = self.albedo;
-        true
+        let scattered = Ray::new(record.p, scatter_direction);
+        Some((self.albedo, scattered))
     }
 }
 
@@ -61,13 +56,14 @@ impl MaterialTrait for Metal {
         &self,
         ray_in: &Ray,
         record: &HitRecord,
-        attenuation: &mut Color,
-        scattered: &mut Ray,
         _rng: &mut dyn RngCore,
-    ) -> bool {
+    ) -> Option<(Color, Ray)> {
         let reflected = ray_in.direction().unit_vector().reflect(&record.normal);
-        *scattered = Ray::new(record.p, reflected);
-        *attenuation = self.albedo;
-        scattered.direction().dot(&record.normal) > 0.0
+        let scattered = Ray::new(record.p, reflected);
+        if scattered.direction().dot(&record.normal) > 0.0 {
+            Some((self.albedo, scattered))
+        } else {
+            None
+        }
     }
 }
