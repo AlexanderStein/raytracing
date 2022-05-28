@@ -1,10 +1,9 @@
 #[macro_use]
 extern crate approx;
 
-use crate::{camera::Camera, color::*, hitable::HitableList, material::*, sphere::*, vec3::*};
+use crate::{camera::Camera, color::*, vec3::*, world::random_scene};
 use image::{load_from_memory_with_format, ImageFormat};
 use rand::prelude::*;
-use std::rc::Rc;
 
 mod camera;
 mod color;
@@ -13,58 +12,27 @@ mod material;
 mod ray;
 mod sphere;
 mod vec3;
-
-pub const ASPECT_RATIO: f64 = 16.0 / 9.0;
+mod world;
 
 fn main() {
     let mut rng = thread_rng();
 
     // Image
+    const ASPECT_RATIO: f64 = 3.0 / 2.0;
     const IMAGE_WIDTH: usize = 1200;
     const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
     const SAMPLES_PER_PIXEL: usize = 10;
     const MAX_DEPTH: usize = 50;
 
     // World
-    let mut world = HitableList { objects: vec![] };
-
-    let material_ground = Rc::new(Lambertian::new(&Color::new(0.8, 0.8, 0.0)));
-    let material_center = Rc::new(Lambertian::new(&Color::new(0.1, 0.2, 0.5)));
-    let material_left = Rc::new(Dielectric::new(1.5));
-    let material_right = Rc::new(Metal::new(&Color::new(0.8, 0.6, 0.2), 0.0));
-
-    world.objects.push(Rc::new(Sphere::new(
-        Point3::new(0.0, -100.5, -1.0),
-        100.0,
-        material_ground.clone(),
-    )));
-    world.objects.push(Rc::new(Sphere::new(
-        Point3::new(0.0, 0.0, -1.0),
-        0.5,
-        material_center.clone(),
-    )));
-    world.objects.push(Rc::new(Sphere::new(
-        Point3::new(-1.0, 0.0, -1.0),
-        0.5,
-        material_left.clone(),
-    )));
-    world.objects.push(Rc::new(Sphere::new(
-        Point3::new(-1.0, 0.0, -1.0),
-        -0.4,
-        material_left.clone(),
-    )));
-    world.objects.push(Rc::new(Sphere::new(
-        Point3::new(1.0, 0.0, -1.0),
-        0.5,
-        material_right.clone(),
-    )));
+    let world = random_scene(&mut rng);
 
     // Camera
-    let lookfrom = Point3::new(3.0, 3.0, 2.0);
-    let lookat = Point3::new(0.0, 0.0, -1.0);
+    let lookfrom = Point3::new(13.0, 2.0, 3.0);
+    let lookat = Point3::new(0.0, 0.0, 0.0);
     let vup = Vec3::new(0.0, 1.0, 0.0);
-    let dist_to_focus = (lookfrom - lookat).length();
-    let aperture = 2.0;
+    let dist_to_focus = 10.0;
+    let aperture = 0.1;
 
     let camera = Camera::new(
         &lookfrom,
