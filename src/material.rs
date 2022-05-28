@@ -4,7 +4,7 @@ use rand::RngCore;
 pub trait MaterialTrait {
     fn scatter(
         &self,
-        ray_in: &Ray,
+        ray: &Ray,
         record: &HitRecord,
         rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)>;
@@ -23,7 +23,7 @@ impl Lambertian {
 impl MaterialTrait for Lambertian {
     fn scatter(
         &self,
-        _ray_in: &Ray,
+        _ray: &Ray,
         record: &HitRecord,
         rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
@@ -59,11 +59,11 @@ impl Metal {
 impl MaterialTrait for Metal {
     fn scatter(
         &self,
-        ray_in: &Ray,
+        ray: &Ray,
         record: &HitRecord,
         rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
-        let reflected = ray_in.direction().unit_vector().reflect(&record.normal);
+        let reflected = ray.direction().unit_vector().reflect(&record.normal);
         let scattered = Ray::new(
             record.p,
             reflected + self.fuzz * Vec3::random_in_unit_sphere(rng),
@@ -89,7 +89,7 @@ impl Dielectric {
 impl MaterialTrait for Dielectric {
     fn scatter(
         &self,
-        ray_in: &Ray,
+        ray: &Ray,
         record: &HitRecord,
         _rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
@@ -100,7 +100,7 @@ impl MaterialTrait for Dielectric {
             self.refraction_index
         };
 
-        let unit_direction = ray_in.direction().unit_vector();
+        let unit_direction = ray.direction().unit_vector();
         let refracted = unit_direction.refract(&record.normal, refraction_ratio);
         let scattered = Ray::new(record.p, refracted);
         Some((attenuation, scattered))
