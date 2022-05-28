@@ -1,9 +1,6 @@
 use crate::{color::Color, hitable::HitRecord, ray::Ray, vec3::*};
 use rand::RngCore;
 
-#[derive(Clone)]
-pub struct Material;
-
 pub trait MaterialTrait {
     fn scatter(
         &self,
