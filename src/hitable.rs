@@ -2,7 +2,6 @@ use crate::{ray::*, vec3::*, material::Material};
 use std::rc::Rc;
 use std::option::Option;
 
-#[derive(Clone)]
 pub struct HitRecord {
     pub p: Point3,
     pub normal: Vec3,
@@ -38,7 +37,7 @@ impl Hittable for HitableList {
         for obj in self.objects.iter() {
             if let Some(temp_rec) = obj.hit(ray, t_min, closest_so_far) {
                 closest_so_far = temp_rec.t;
-                hit_anything = Some(temp_rec.clone());
+                hit_anything = Some(temp_rec);
             }
         }
 
