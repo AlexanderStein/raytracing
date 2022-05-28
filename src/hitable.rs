@@ -1,5 +1,6 @@
 use crate::{ray::*, vec3::*, material::Material};
 use std::rc::Rc;
+use std::option::Option;
 
 #[derive(Clone)]
 pub struct HitRecord {
@@ -11,15 +12,6 @@ pub struct HitRecord {
 }
 
 impl HitRecord {
-    pub fn new() -> Self {
-        Self {
-            p: Point3::new(0.0, 0.0, 0.0),
-            normal: Vec3::new(0.0, 0.0, 0.0),
-            material: Material,
-            t: 0.0,
-            front_face: false,
-        }
-    }
     pub fn set_face_normal(&mut self, ray: &Ray, outward_normal: &Vec3) {
         self.front_face = ray.direction().dot(outward_normal) < 0.0;
         self.normal = if self.front_face {
@@ -31,8 +23,7 @@ impl HitRecord {
 }
 
 pub trait Hittable {
-    // TODO: record is an output only parameter, move it to return list
-    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool;
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord>;
 }
 
 pub struct HitableList {
@@ -40,16 +31,14 @@ pub struct HitableList {
 }
 
 impl Hittable for HitableList {
-    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64, record: &mut HitRecord) -> bool {
-        let mut temp_rec = HitRecord::new();
-        let mut hit_anything = false;
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+        let mut hit_anything = None;
         let mut closest_so_far = t_max;
 
         for obj in self.objects.iter() {
-            if obj.hit(ray, t_min, closest_so_far, &mut temp_rec) {
-                hit_anything = true;
+            if let Some(temp_rec) = obj.hit(ray, t_min, closest_so_far) {
                 closest_so_far = temp_rec.t;
-                *record = temp_rec.clone();
+                hit_anything = Some(temp_rec.clone());
             }
         }
 
