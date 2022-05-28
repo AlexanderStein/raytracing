@@ -20,9 +20,9 @@ fn main() {
     let mut rng = thread_rng();
 
     // Image
-    const IMAGE_WIDTH: usize = 400;
+    const IMAGE_WIDTH: usize = 1200;
     const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
-    const SAMPLES_PER_PIXEL: usize = 100;
+    const SAMPLES_PER_PIXEL: usize = 10;
     const MAX_DEPTH: usize = 50;
 
     // World
