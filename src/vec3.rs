@@ -1,6 +1,6 @@
 use rand::{Rng, RngCore};
 use std::fmt::Display;
-use std::ops::{self, Range};
+use std::ops;
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -47,16 +47,12 @@ impl Vec3 {
         Vec3::new(x, y, z)
     }
 
-    fn random(rng: &mut dyn RngCore, range: Range<f64>) -> Vec3 {
-        let x = rng.gen_range(range.clone());
-        let y = rng.gen_range(range.clone());
-        let z = rng.gen_range(range.clone());
-        Vec3 { e: [x, y, z] }
-    }
-
     pub fn random_in_unit_sphere(rng: &mut dyn RngCore) -> Vec3 {
         loop {
-            let point = Vec3::random(rng, -1.0..1.0);
+            let x = rng.gen_range(-1.0..1.0);
+            let y = rng.gen_range(-1.0..1.0);
+            let z = rng.gen_range(-1.0..1.0);
+            let point = Vec3::new(x, y, z);
             if point.length_squared() < 1.0 {
                 return point;
             }
