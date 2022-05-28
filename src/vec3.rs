@@ -1,6 +1,6 @@
 use rand::{Rng, RngCore};
 use std::fmt::Display;
-use std::ops;
+use std::ops::{self, Range};
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -45,6 +45,13 @@ impl Vec3 {
         let y = self.e[2] * v.e[0] - self.e[0] * v.e[2];
         let z = self.e[0] * v.e[1] - self.e[1] * v.e[0];
         Vec3::new(x, y, z)
+    }
+
+    pub fn random(rng: &mut dyn RngCore, range: Range<f64>) -> Vec3 {
+        let x = rng.gen_range(range.clone());
+        let y = rng.gen_range(range.clone());
+        let z = rng.gen_range(range.clone());
+        Vec3 { e: [x, y, z] }
     }
 
     pub fn random_in_unit_sphere(rng: &mut dyn RngCore) -> Vec3 {
