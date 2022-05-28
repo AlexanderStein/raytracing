@@ -2,12 +2,8 @@ use crate::{color::Color, hitable::HitRecord, ray::Ray, vec3::*};
 use rand::RngCore;
 
 pub trait MaterialTrait {
-    fn scatter(
-        &self,
-        ray: &Ray,
-        record: &HitRecord,
-        rng: &mut dyn RngCore,
-    ) -> Option<(Color, Ray)>;
+    fn scatter(&self, ray: &Ray, record: &HitRecord, rng: &mut dyn RngCore)
+        -> Option<(Color, Ray)>;
 }
 
 pub struct Lambertian {
