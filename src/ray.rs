@@ -34,9 +34,13 @@ impl Ray {
         }
 
         if let Some(record) = world.hit(self, 0.001, f64::MAX) {
-            let target = record.p + record.normal + Vec3::random_in_hemisphere(&record.normal, rng);
-            let ray = Ray::new(record.p, target - record.p);
-            return 0.5 * ray.color(world, depth - 1, rng);
+            let scattered = Ray::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 0.0));
+            let attenuation = Color::new(0.0, 0.0, 0.0);
+
+            if record.material.scatter(self, &record, &mut attenuation, &mut scattered, rng) {
+                return attenuation * scattered.color(world, depth -1, rng);
+            }
+            return Color::new(0.0, 0.0, 0.0)
         }
         let unit_direction = &self.direction().unit_vector();
         let t = 0.5 * (unit_direction.y() + 1.0);
