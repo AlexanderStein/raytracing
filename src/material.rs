@@ -25,7 +25,7 @@ impl Lambertian {
 impl MaterialTrait for Lambertian {
     fn scatter(
         &self,
-        ray_in: &Ray,
+        _ray_in: &Ray,
         record: &HitRecord,
         attenuation: &mut Color,
         scattered: &mut Ray,
@@ -63,7 +63,7 @@ impl MaterialTrait for Metal {
         record: &HitRecord,
         attenuation: &mut Color,
         scattered: &mut Ray,
-        rng: &mut dyn RngCore,
+        _rng: &mut dyn RngCore,
     ) -> bool {
         let reflected = ray_in.direction().unit_vector().reflect(&record.normal);
         *scattered = Ray::new(record.p, reflected);
