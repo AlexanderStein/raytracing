@@ -2,6 +2,7 @@
 extern crate approx;
 
 use crate::{camera::Camera, color::*, hitable::HitableList, material::*, sphere::*, vec3::*};
+use image::{load_from_memory_with_format, ImageFormat};
 use rand::prelude::*;
 use std::rc::Rc;
 
@@ -12,8 +13,6 @@ mod material;
 mod ray;
 mod sphere;
 mod vec3;
-
-use image::{load_from_memory_with_format, ImageFormat};
 
 pub const ASPECT_RATIO: f64 = 16.0 / 9.0;
 
