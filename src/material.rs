@@ -1,5 +1,5 @@
 use crate::{color::Color, hitable::HitRecord, ray::Ray, vec3::*};
-use rand::RngCore;
+use rand::{Rng, RngCore};
 
 pub trait MaterialTrait {
     fn scatter(&self, ray: &Ray, record: &HitRecord, rng: &mut dyn RngCore)
@@ -80,6 +80,13 @@ impl Dielectric {
     pub fn new(refraction_index: f64) -> Self {
         Dielectric { refraction_index }
     }
+
+    fn reflectance(cosine: f64, reflectance_index: f64) -> f64 {
+        // Use Schlick's approximation for reflectance.
+        let r0 = (1.0 - reflectance_index) / (1.0 + reflectance_index);
+        let r0 = r0 * r0;
+        r0 + (1.0 - r0) * (1.0 - cosine).powi(5)
+    }
 }
 
 impl MaterialTrait for Dielectric {
@@ -87,7 +94,7 @@ impl MaterialTrait for Dielectric {
         &self,
         ray: &Ray,
         record: &HitRecord,
-        _rng: &mut dyn RngCore,
+        rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
         let attenuation = Color::new(1.0, 1.0, 1.0);
         let refraction_ratio = if record.front_face {
@@ -101,7 +108,9 @@ impl MaterialTrait for Dielectric {
         let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
 
         let cannot_refract = refraction_ratio * sin_theta > 1.0;
-        let direction = if cannot_refract {
+        let direction = if cannot_refract
+            || Self::reflectance(cos_theta, refraction_ratio) > rng.gen_range(0.0..1.0)
+        {
             unit_direction.reflect(&record.normal)
         } else {
             unit_direction.refract(&record.normal, refraction_ratio)
