@@ -1,4 +1,8 @@
-use crate::{ASPECT_RATIO, ray::Ray, vec3::{Point3, Vec3}};
+use crate::{
+    ray::Ray,
+    vec3::{Point3, Vec3},
+    ASPECT_RATIO,
+};
 
 pub struct Camera {
     origin: Point3,

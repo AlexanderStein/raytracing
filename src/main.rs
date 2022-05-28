@@ -1,6 +1,6 @@
 use crate::{color::*, hitable::HitableList, ray::*, sphere::*, vec3::*, camera::Camera};
-use std::rc::Rc;
 use rand::prelude::*;
+use std::rc::Rc;
 
 mod camera;
 mod color;

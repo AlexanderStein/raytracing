@@ -1,6 +1,6 @@
-use crate::{ray::*, vec3::*, material::MaterialTrait};
-use std::rc::Rc;
+use crate::{material::MaterialTrait, ray::*, vec3::*};
 use std::option::Option;
+use std::rc::Rc;
 
 pub struct HitRecord {
     pub p: Point3,

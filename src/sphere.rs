@@ -1,4 +1,4 @@
-use crate::{hitable::*, vec3::*, material::MaterialTrait};
+use crate::{hitable::*, material::MaterialTrait, vec3::*};
 use std::option::Option;
 
 pub struct Sphere {
@@ -9,7 +9,11 @@ pub struct Sphere {
 
 impl Sphere {
     pub fn new(center: Point3, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
-        Self { center, radius, material }
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 }
 
