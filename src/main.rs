@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate approx;
+
 use crate::{camera::Camera, color::*, hitable::HitableList, material::*, sphere::*, vec3::*};
 use rand::prelude::*;
 use std::rc::Rc;

@@ -236,6 +236,26 @@ mod tests {
         assert_eq!(c.e[1], 18.0);
         assert_eq!(c.e[2], 29.0);
     }
+
+    #[test]
+    fn refract() {
+        let uv = Vec3::new(1.0, 2.0, 3.0).unit_vector();
+        let n = Vec3::new(5.0, 1.0, 2.0).unit_vector();
+        let result = uv.refract(&n, 1.5);
+        assert_relative_eq!(result.x(), -1.00362, epsilon = 0.00001);
+        assert_relative_eq!(result.y(), 0.520881, epsilon = 0.00001);
+        assert_relative_eq!(result.z(), 0.640871, epsilon = 0.00001);
+    }
+
+    #[test]
+    fn refract2() {
+        let uv = Vec3::new(-1.0, 50.0, -20.0).unit_vector();
+        let n = Vec3::new(50.0, -1.0, 9.5).unit_vector();
+        let result = uv.refract(&n, 1.5);
+        assert_relative_eq!(result.x(), -0.959069, epsilon = 0.00001);
+        assert_relative_eq!(result.y(), 1.4111, epsilon = 0.00001);
+        assert_relative_eq!(result.z(), -0.733922, epsilon = 0.00001);
+    }
 }
 
 pub type Point3 = Vec3;
