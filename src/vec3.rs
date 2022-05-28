@@ -40,6 +40,14 @@ impl Vec3 {
         self / self.length()
     }
 
+
+    pub fn cross(&self, v: &Vec3) -> Vec3 {
+        let x = self.e[1] * v.e[2] - self.e[2] * v.e[1];
+        let y = self.e[2] * v.e[0] - self.e[0] * v.e[2];
+        let z = self.e[0] * v.e[1] - self.e[1] * v.e[0];
+        Vec3::new(x, y, z)
+    }
+
     fn random(rng: &mut dyn RngCore) -> Vec3 {
         let range = -1.0..1.0;
         let x = rng.gen_range(range.clone());
@@ -259,11 +267,3 @@ mod tests {
 }
 
 pub type Point3 = Vec3;
-
-// Vector utils
-pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
-    let x = u.e[1] * v.e[2] - u.e[2] * v.e[1];
-    let y = u.e[2] * v.e[0] - u.e[0] * v.e[2];
-    let z = u.e[0] * v.e[1] - u.e[1] * v.e[0];
-    Vec3::new(x, y, z)
-}
