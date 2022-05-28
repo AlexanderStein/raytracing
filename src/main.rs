@@ -93,7 +93,7 @@ fn main() {
             for _ in 0..SAMPLES_PER_PIXEL {
                 let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
                 let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
-                let ray = camera.get_ray(u, v);
+                let ray = camera.get_ray(u, v, &mut rng);
                 pixel_color += ray.color(&world, MAX_DEPTH, &mut rng);
             }
             pnm_data += &pixel_color.pnm_color(SAMPLES_PER_PIXEL);
