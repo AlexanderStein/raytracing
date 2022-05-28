@@ -59,7 +59,7 @@ fn main() {
     )));
 
     // Camera
-    let camera = Camera::new();
+    let camera = Camera::new(90.0, ASPECT_RATIO);
 
     // Render
     let mut pnm_data = String::new();
