@@ -34,9 +34,11 @@ impl MaterialTrait for Lambertian {
         let scatter_direction = record.normal + Vec3::random_unit_vector(rng);
 
         // Catch degenerate scatter direction
-        if scatter_direction.near_zero() {
-            scatter_direction = record.normal;
-        }
+        let scatter_direction = if scatter_direction.near_zero() {
+            record.normal
+        } else {
+            scatter_direction
+        };
 
         *scattered = Ray::new(record.p, scatter_direction);
         *attenuation = self.albedo;
