@@ -68,7 +68,6 @@ fn main() {
         }
     }
     eprintln!("");
-    // print!("{}", pnm_data);
 
     match load_from_memory_with_format(&pnm_data.into_bytes(), ImageFormat::Pnm) {
         Ok(img) => img.save("raytracer.png").unwrap(),
