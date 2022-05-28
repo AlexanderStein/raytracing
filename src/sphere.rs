@@ -1,15 +1,15 @@
 use crate::{hitable::*, material::MaterialTrait, vec3::*};
 use std::option::Option;
-use std::rc::Rc;
+use std::sync::Arc;
 
 pub struct Sphere {
     center: Point3,
     radius: f64,
-    material: Rc<dyn MaterialTrait>,
+    material: Arc<dyn MaterialTrait>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64, material: Rc<dyn MaterialTrait>) -> Self {
+    pub fn new(center: Point3, radius: f64, material: Arc<dyn MaterialTrait>) -> Self {
         Self {
             center,
             radius,
