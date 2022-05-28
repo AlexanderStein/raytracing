@@ -1,4 +1,4 @@
-use crate::{color::*, hitable::HitableList, ray::*, sphere::*, vec3::*, camera::Camera};
+use crate::{camera::Camera, color::*, hitable::HitableList, material::*, sphere::*, vec3::*};
 use rand::prelude::*;
 use std::rc::Rc;
 
@@ -25,8 +25,32 @@ fn main() {
 
     // World
     let mut world = HitableList { objects: vec![] };
-    world.objects.push(Rc::new(Sphere::new(Point3::new(0.0, 0.0, -1.0), 0.5)));
-    world.objects.push(Rc::new(Sphere::new(Point3::new(0.0, -100.5, -1.0), 100.0)));
+
+    let material_ground = Box::new(Lambertian::new(&Color::new(0.8, 0.8, 0.0)));
+    let material_center = Box::new(Lambertian::new(&Color::new(0.7, 0.3, 0.3)));
+    let material_left = Box::new(Metal::new(&Color::new(0.8, 0.8, 0.8)));
+    let material_right = Box::new(Metal::new(&Color::new(0.8, 0.6, 0.2)));
+
+    world.objects.push(Rc::new(Sphere::new(
+        Point3::new(0.0, -100.5, -1.0),
+        100.0,
+        Rc::new(material_ground),
+    )));
+    world.objects.push(Rc::new(Sphere::new(
+        Point3::new(0.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_center),
+    )));
+    world.objects.push(Rc::new(Sphere::new(
+        Point3::new(-1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_left),
+    )));
+    world.objects.push(Rc::new(Sphere::new(
+        Point3::new(1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_right),
+    )));
 
     // Camera
     let camera = Camera::new();
