@@ -1,5 +1,5 @@
 use crate::{
-    hitable::{HitRecord, HitableList, Hittable},
+    hitable::{HitableList, Hittable},
     vec3::*,
     Color,
 };
