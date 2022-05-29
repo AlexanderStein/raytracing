@@ -17,7 +17,7 @@ mod vec3;
 mod world;
 
 #[derive(Parser,Default,Debug)]
-#[clap(author="Alexander Stein", about)]
+#[clap(author="Alexander Stein", version=env!("VERGEN_GIT_SEMVER_LIGHTWEIGHT"), about)]
 /// Ray Tracing in One Weekend
 struct Arguments {
     #[clap(default_value_t=0, short, long)]

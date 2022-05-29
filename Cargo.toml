@@ -2,6 +2,7 @@
 name = "raytracer"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -11,3 +12,7 @@ clap = { version = "3.1", features = ["derive"] }
 image = "0.24"
 rand = "0.8"
 rayon = "1.5"
+
+[build-dependencies]
+vergen = { version = "7", default-features = false, features = ["git"] }
+anyhow = "1.0"
