@@ -2,6 +2,7 @@
 extern crate approx;
 
 use crate::{camera::Camera, color::*, vec3::*, world::random_scene};
+use clap::Parser;
 use image::{load_from_memory_with_format, ImageFormat};
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -15,7 +16,19 @@ mod sphere;
 mod vec3;
 mod world;
 
+#[derive(Parser,Default,Debug)]
+#[clap(author="Alexander Stein", about)]
+/// Ray Tracing in One Weekend
+struct Arguments {
+    #[clap(default_value_t=0, short, long)]
+    /// maximum threads to be used in parallel. 0 = all logical CPUs
+    threads: usize,
+}
+
 fn main() {
+    let args = Arguments::parse();
+    rayon::ThreadPoolBuilder::new().num_threads(args.threads).build_global().unwrap();
+
     let mut rng = thread_rng();
 
     // Image
