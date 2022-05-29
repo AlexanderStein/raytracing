@@ -1,14 +1,14 @@
 use crate::{hitable::*, material::MaterialTrait, vec3::*};
 use std::option::Option;
 
-pub struct Sphere {
+pub struct Sphere<M: MaterialTrait> {
     center: Point3,
     radius: f64,
-    material: Box<dyn MaterialTrait>,
+    material: M,
 }
 
-impl Sphere {
-    pub fn new(center: Point3, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
+impl<M: MaterialTrait> Sphere<M> {
+    pub fn new(center: Point3, radius: f64, material: M) -> Self {
         Self {
             center,
             radius,
@@ -17,7 +17,7 @@ impl Sphere {
     }
 }
 
-impl Hittable for Sphere {
+impl<M: MaterialTrait> Hittable for Sphere<M> {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = ray.origin() - self.center;
         let a = ray.direction().length_squared();
