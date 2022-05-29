@@ -62,6 +62,7 @@ fn main() {
     );
 
     // Render
+    //TODO: Create vector dynamically, so width & height can be runtime values
     let mut pixel_colors =  vec![[Color::new(0.0, 0.0, 0.0); IMAGE_WIDTH]; IMAGE_HEIGHT];
     pixel_colors
         .par_iter_mut()
