@@ -28,6 +28,7 @@ def main():
                 threads.append(int(run['parameters']['threads']))
 
             p.line(threads, time, legend_label=f'{id}', line_width=2)
+            p.circle(threads, time, legend_label=f'{id}', fill_color="white", size=8)
 
     show(p)
 
