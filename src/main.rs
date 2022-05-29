@@ -7,6 +7,10 @@ use clap::Parser;
 use image::{load_from_memory_with_format, ImageFormat};
 use rand::prelude::*;
 use rayon::prelude::*;
+use std::sync::{
+    atomic::{AtomicUsize, Ordering},
+    Arc,
+};
 
 mod camera;
 mod color;
@@ -73,10 +77,17 @@ fn main() {
     // Render
     let camera_ref = &camera;
     let world_ref = &world;
+    let scanlines = Arc::new(AtomicUsize::new(image_height));
     let image: Vec<Color> = (0..image_height)
         .into_par_iter()
         .rev()
         .flat_map(|y| {
+            let scanlines_left = scanlines.fetch_sub(1, Ordering::SeqCst);
+            eprint!(
+                "\rScanlines remaining: {} ({})%",
+                scanlines_left,
+                ((1.0 - (scanlines_left as f32 / image_height as f32)) * 100.0) as u16
+            );
             (0..image_width).into_par_iter().map(move |x| {
                 let sampled_pixel = (0..args.samples_per_pixel)
                     .map(move |_| {
