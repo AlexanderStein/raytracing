@@ -1,13 +1,12 @@
 use crate::{color::*, hitable::HitableList, material::*, sphere::*, vec3::*};
 use rand::{Rng, RngCore};
-use std::sync::Arc;
 
 pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
-    // TODO: Create Vec<Arc<dyn Hittable>> first and pass this to world
+    // TODO: Create Vec<Box<dyn Hittable>> first and pass this to world
     let mut world = HitableList { objects: vec![] };
 
     let ground_material = Box::new(Lambertian::new(&Color::new(0.5, 0.5, 0.5)));
-    world.objects.push(Arc::new(Sphere::new(
+    world.objects.push(Box::new(Sphere::new(
         Point3::new(0.0, -1000.0, 0.0),
         1000.0,
         ground_material,
@@ -38,27 +37,27 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
                 };
                 world
                     .objects
-                    .push(Arc::new(Sphere::new(center, 0.2, sphere_material)));
+                    .push(Box::new(Sphere::new(center, 0.2, sphere_material)));
             }
         }
     }
 
     let material1 = Box::new(Dielectric::new(1.5));
-    world.objects.push(Arc::new(Sphere::new(
+    world.objects.push(Box::new(Sphere::new(
         Point3::new(0.0, 1.0, 0.0),
         1.0,
         material1,
     )));
 
     let material2 = Box::new(Lambertian::new(&Color::new(0.4, 0.2, 0.1)));
-    world.objects.push(Arc::new(Sphere::new(
+    world.objects.push(Box::new(Sphere::new(
         Point3::new(-4.0, 1.0, 0.0),
         1.0,
         material2,
     )));
 
     let material3 = Box::new(Metal::new(&Color::new(0.7, 0.6, 0.5), 0.0));
-    world.objects.push(Arc::new(Sphere::new(
+    world.objects.push(Box::new(Sphere::new(
         Point3::new(4.0, 1.0, 0.0),
         1.0,
         material3,

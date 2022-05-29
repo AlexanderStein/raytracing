@@ -1,6 +1,5 @@
 use crate::{material::MaterialTrait, ray::*, vec3::*};
 use std::option::Option;
-use std::sync::Arc;
 
 pub struct HitRecord<'a> {
     pub p: Point3,
@@ -26,7 +25,7 @@ pub trait Hittable: Send + Sync {
 }
 
 pub struct HitableList {
-    pub objects: Vec<Arc<dyn Hittable>>,
+    pub objects: Vec<Box<dyn Hittable>>,
 }
 
 impl Hittable for HitableList {
