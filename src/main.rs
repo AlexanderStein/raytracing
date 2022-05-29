@@ -35,7 +35,7 @@ struct Arguments {
     #[clap(default_value_t = 480, long)]
     image_width: usize,
     /// image height in pixel
-    #[clap(default_value_t = 320, long)]
+    #[clap(default_value_t = 360, long)]
     image_height: usize,
 }
 
