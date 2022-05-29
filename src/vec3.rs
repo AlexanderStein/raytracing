@@ -1,6 +1,7 @@
 use rand::{Rng, RngCore};
 use std::fmt::Display;
 use std::ops::{self, Range};
+use std::iter;
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -117,6 +118,16 @@ impl Vec3 {
 impl Display for Vec3 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{} {} {}", self.e[0], self.e[1], self.e[2])
+    }
+}
+
+impl iter::Sum for Vec3 {
+    fn sum<I: Iterator<Item = Self>>(mut iter: I) -> Self {
+        let mut result = Vec3::zero();
+        while let Some(v) = iter.next() {
+            result += v;
+        }
+        result
     }
 }
 
