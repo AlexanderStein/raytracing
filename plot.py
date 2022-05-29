@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import argparse
+import itertools
 import json
 from turtle import color
 from bokeh.layouts import row
 from bokeh.plotting import figure, show
 from bokeh.models import ColumnDataSource, Range1d
-
+from bokeh.palettes import Dark2_5 as palette
 
 def main():
     parser = argparse.ArgumentParser(description='Plot hyperfine results')
@@ -20,8 +21,10 @@ def main():
     speedup_plot = figure(
         title="Performance gain", x_axis_label="# of threads", y_axis_label="Speedup factor")
 
+    colors = itertools.cycle(palette)
     max_threads = 0
     for file in args.files:
+        color = next(colors)
         with open(file) as file:
             data = json.load(file)
             threads = []
@@ -46,7 +49,8 @@ def main():
             time_plot.line(x='threads', y='time',
                            source=time_data,
                            legend_label=f'{id}',
-                           line_width=2
+                           line_width=2,
+                           color=color,
                            )
             time_plot.circle(x='threads', y='time',
                              source=time_data,
@@ -66,6 +70,7 @@ def main():
             speedup_plot.line(x='threads', y='gain',
                               source=speedup_data,
                               legend_label=f'{id}',
+                              color=color,
                               line_width=2)
             speedup_plot.circle(x='threads', y='gain',
                                 source=speedup_data,
