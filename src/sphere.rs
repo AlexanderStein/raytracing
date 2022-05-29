@@ -40,7 +40,7 @@ impl Hittable for Sphere {
 
         let mut record = HitRecord {
             p: ray.at(root),
-            normal: Vec3::new(0.0, 0.0, 0.0),
+            normal: Vec3::zero(),
             material: &self.material,
             t: root,
             front_face: false,

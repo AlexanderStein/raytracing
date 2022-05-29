@@ -30,14 +30,14 @@ impl Ray {
     pub fn color(&self, world: &HitableList, depth: usize, rng: &mut dyn RngCore) -> Color {
         // If we've exceeded the ray bounce limit, no more light is gathered.
         if depth <= 0 {
-            return Color::new(0.0, 0.0, 0.0);
+            return Color::zero();
         }
 
         if let Some(record) = world.hit(self, 0.001, f64::MAX) {
             if let Some((attenuation, scattered)) = record.material.scatter(self, &record, rng) {
                 return attenuation * scattered.color(world, depth - 1, rng);
             }
-            return Color::new(0.0, 0.0, 0.0);
+            return Color::zero();
         }
         let unit_direction = self.direction().unit_vector();
         let t = 0.5 * (unit_direction.y() + 1.0);
