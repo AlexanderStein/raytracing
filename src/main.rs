@@ -17,21 +17,24 @@ mod sphere;
 mod vec3;
 mod world;
 
-#[derive(Parser,Default,Debug)]
+#[derive(Parser, Default, Debug)]
 #[clap(author="Alexander Stein", version=env!("VERGEN_GIT_SEMVER_LIGHTWEIGHT"), about)]
 /// Ray Tracing in One Weekend
 struct Arguments {
-    #[clap(default_value_t=0, short, long)]
+    #[clap(default_value_t = 0, short, long)]
     /// maximum threads to be used in parallel. 0 = all logical CPUs
     threads: usize,
     /// per pixel over-sampling. 500 for good results. Beware: time-consuming
-    #[clap(default_value_t=100, short, long)]
+    #[clap(default_value_t = 100, short, long)]
     samples_per_pixel: usize,
 }
 
 fn main() {
     let args = Arguments::parse();
-    rayon::ThreadPoolBuilder::new().num_threads(args.threads).build_global().unwrap();
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(args.threads)
+        .build_global()
+        .unwrap();
 
     let mut rng = thread_rng();
 
@@ -62,35 +65,31 @@ fn main() {
     );
 
     // Render
-    //TODO: Create vector dynamically, so width & height can be runtime values
-    let mut pixel_colors =  vec![[Color::new(0.0, 0.0, 0.0); IMAGE_WIDTH]; IMAGE_HEIGHT];
-    pixel_colors
-        .par_iter_mut()
-        .enumerate()
-        .for_each(|(y, column)| {
-            // eprint!(
-            //     "\rScanlines remaining: {} ({})%",
-            //     y,
-            //     ((1.0 - (y as f32 / IMAGE_HEIGHT as f32)) * 100.0) as u16
-            // );
-            column.par_iter_mut().enumerate().for_each(|(x, color)| {
-                let mut rng = thread_rng();
-                for _ in 0..args.samples_per_pixel {
-                    let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
-                    let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
-                    let ray = camera.get_ray(u, v, &mut rng);
-                    *color += ray.color(&world, MAX_DEPTH, &mut rng);
-                }
+    let camera_ref = &camera;
+    let world_ref = &world;
+    let image: Vec<Color> = (0..IMAGE_HEIGHT)
+        .into_par_iter()
+        .rev()
+        .flat_map(|y| {
+            (0..IMAGE_WIDTH).into_par_iter().map(move |x| {
+                let sampled_pixel = (0..args.samples_per_pixel)
+                    .map(move |_| {
+                        let mut rng = thread_rng();
+                        let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
+                        let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
+                        let ray = camera_ref.get_ray(u, v, &mut rng);
+                        ray.color(world_ref, MAX_DEPTH, &mut rng)
+                    })
+                    .sum();
+                sampled_pixel
             })
-        });
+        })
+        .collect();
 
     // Serialize to PNM
     let mut pnm_data = format!("P3\n{} {}\n255\n\n", IMAGE_WIDTH, IMAGE_HEIGHT);
-
-    for rows in pixel_colors.iter().rev() {
-        for pixel_color in rows {
-            pnm_data += &pixel_color.pnm_color(args.samples_per_pixel);
-        }
+    for pixel in image {
+        pnm_data += &pixel.pnm_color(args.samples_per_pixel);
     }
     eprintln!("");
 
