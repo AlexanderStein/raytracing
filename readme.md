@@ -1,7 +1,7 @@
 # Benchmarking multithreading
 Command for running benchmark test:
 ```
-hyperfine --max-runs 3 --export-json time.json --parameter-list threads 1,2,4,8,16 './target/release/raytracer --threads={threads}'
+hyperfine --setup 'cargo build --release' --max-runs 3 --export-json time.json --parameter-list threads 1,2,4,8,16 './target/release/raytracer --threads={threads}'
 ```
 
 ## Benchmark identification
