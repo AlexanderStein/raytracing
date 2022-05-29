@@ -24,6 +24,9 @@ struct Arguments {
     #[clap(default_value_t=0, short, long)]
     /// maximum threads to be used in parallel. 0 = all logical CPUs
     threads: usize,
+    /// per pixel over-sampling. 500 for good results. Beware: time-consuming
+    #[clap(default_value_t=100, short, long)]
+    samples_per_pixel: usize,
 }
 
 fn main() {
@@ -36,7 +39,6 @@ fn main() {
     const ASPECT_RATIO: f64 = 3.0 / 2.0;
     const IMAGE_WIDTH: usize = 1200;
     const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
-    const SAMPLES_PER_PIXEL: usize = 500;
     const MAX_DEPTH: usize = 50;
 
     // World
@@ -72,7 +74,7 @@ fn main() {
             // );
             column.par_iter_mut().enumerate().for_each(|(x, color)| {
                 let mut rng = thread_rng();
-                for _ in 0..SAMPLES_PER_PIXEL {
+                for _ in 0..args.samples_per_pixel {
                     let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
                     let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
                     let ray = camera.get_ray(u, v, &mut rng);
@@ -86,7 +88,7 @@ fn main() {
 
     for rows in pixel_colors.iter().rev() {
         for pixel_color in rows {
-            pnm_data += &pixel_color.pnm_color(SAMPLES_PER_PIXEL);
+            pnm_data += &pixel_color.pnm_color(args.samples_per_pixel);
         }
     }
     eprintln!("");
