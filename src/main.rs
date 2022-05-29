@@ -27,6 +27,12 @@ struct Arguments {
     /// per pixel over-sampling. 500 for good results. Beware: time-consuming
     #[clap(default_value_t = 100, short, long)]
     samples_per_pixel: usize,
+    /// image width in pixel
+    #[clap(default_value_t = 480, long)]
+    image_width: usize,
+    /// image height in pixel
+    #[clap(default_value_t = 320, long)]
+    image_height: usize,
 }
 
 fn main() {
@@ -39,9 +45,9 @@ fn main() {
     let mut rng = thread_rng();
 
     // Image
-    const ASPECT_RATIO: f64 = 3.0 / 2.0;
-    const IMAGE_WIDTH: usize = 1200;
-    const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
+    let image_width = args.image_width;
+    let image_height = args.image_height;
+    let ascpect_ratio = args.image_width as f64 / args.image_height as f64;
     const MAX_DEPTH: usize = 50;
 
     // World
@@ -59,7 +65,7 @@ fn main() {
         &lookat,
         &vup,
         20.0,
-        ASPECT_RATIO,
+        ascpect_ratio,
         aperture,
         dist_to_focus,
     );
@@ -67,16 +73,16 @@ fn main() {
     // Render
     let camera_ref = &camera;
     let world_ref = &world;
-    let image: Vec<Color> = (0..IMAGE_HEIGHT)
+    let image: Vec<Color> = (0..image_height)
         .into_par_iter()
         .rev()
         .flat_map(|y| {
-            (0..IMAGE_WIDTH).into_par_iter().map(move |x| {
+            (0..image_width).into_par_iter().map(move |x| {
                 let sampled_pixel = (0..args.samples_per_pixel)
                     .map(move |_| {
                         let mut rng = thread_rng();
-                        let u = (x as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_WIDTH - 1) as f64;
-                        let v = (y as f64 + rng.gen_range(0.0..1.0)) / (IMAGE_HEIGHT - 1) as f64;
+                        let u = (x as f64 + rng.gen_range(0.0..1.0)) / (image_width - 1) as f64;
+                        let v = (y as f64 + rng.gen_range(0.0..1.0)) / (image_height - 1) as f64;
                         let ray = camera_ref.get_ray(u, v, &mut rng);
                         ray.color(world_ref, MAX_DEPTH, &mut rng)
                     })
@@ -87,7 +93,7 @@ fn main() {
         .collect();
 
     // Serialize to PNM
-    let mut pnm_data = format!("P3\n{} {}\n255\n\n", IMAGE_WIDTH, IMAGE_HEIGHT);
+    let mut pnm_data = format!("P3\n{} {}\n255\n\n", image_width, image_height);
     for pixel in image {
         pnm_data += &pixel.pnm_color(args.samples_per_pixel);
     }
