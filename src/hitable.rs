@@ -2,15 +2,15 @@ use crate::{material::MaterialTrait, ray::*, vec3::*};
 use std::option::Option;
 use std::sync::Arc;
 
-pub struct HitRecord {
+pub struct HitRecord<'a> {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: Arc<dyn MaterialTrait>,
+    pub material: &'a Box<dyn MaterialTrait>,
     pub t: f64,
     pub front_face: bool,
 }
 
-impl HitRecord {
+impl<'a> HitRecord<'a> {
     pub fn set_face_normal(&mut self, ray: &Ray, outward_normal: &Vec3) {
         self.front_face = ray.direction().dot(outward_normal) < 0.0;
         self.normal = if self.front_face {

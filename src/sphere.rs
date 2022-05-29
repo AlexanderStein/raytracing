@@ -1,15 +1,14 @@
 use crate::{hitable::*, material::MaterialTrait, vec3::*};
 use std::option::Option;
-use std::sync::Arc;
 
 pub struct Sphere {
     center: Point3,
     radius: f64,
-    material: Arc<dyn MaterialTrait>,
+    material: Box<dyn MaterialTrait>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64, material: Arc<dyn MaterialTrait>) -> Self {
+    pub fn new(center: Point3, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
         Self {
             center,
             radius,
@@ -42,7 +41,7 @@ impl Hittable for Sphere {
         let mut record = HitRecord {
             p: ray.at(root),
             normal: Vec3::new(0.0, 0.0, 0.0),
-            material: self.material.clone(),
+            material: &self.material,
             t: root,
             front_face: false,
         };
