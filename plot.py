@@ -32,7 +32,7 @@ def main():
             try:
                 id = data['env']['id']
             except:
-                id = "unknown"
+                id = file.name
 
             for run in data['results']:
                 mean = float(run['mean'])
