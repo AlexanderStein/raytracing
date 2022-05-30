@@ -3,11 +3,11 @@
 extern crate approx;
 
 use crate::{camera::Camera, color::*, vec3::*, world::random_scene};
-use clap::Parser;
+use clap::{arg, command};
 use image::{load_from_memory_with_format, ImageFormat};
+use indicatif::{ProgressBar, ProgressStyle};
 use rand::prelude::*;
 use rayon::prelude::*;
-use indicatif::{ProgressBar, ProgressStyle};
 
 mod camera;
 mod color;
@@ -18,37 +18,60 @@ mod sphere;
 mod vec3;
 mod world;
 
-#[derive(Parser, Default, Debug)]
-#[clap(author="Alexander Stein", version=env!("VERGEN_GIT_SEMVER_LIGHTWEIGHT"), about)]
-/// Ray Tracing in One Weekend
-struct Arguments {
-    #[clap(default_value_t = 0, short, long)]
-    /// maximum threads to be used in parallel. 0 = all logical CPUs
-    threads: usize,
-    /// per pixel over-sampling. 500 for good results. Beware: time-consuming
-    #[clap(default_value_t = 100, short, long)]
-    samples_per_pixel: usize,
-    /// image width in pixel
-    #[clap(default_value_t = 480, long)]
-    image_width: usize,
-    /// image height in pixel
-    #[clap(default_value_t = 360, long)]
-    image_height: usize,
-}
-
 fn main() {
-    let args = Arguments::parse();
+    let matches = command!()
+        .version(env!("VERGEN_GIT_SEMVER_LIGHTWEIGHT"))
+        .author("Alexander Stein <alexander.stein@mailbox.org>")
+        .about("Ray Tracing in One Weekend")
+        .arg(
+            arg!(
+                -x --"image-width" <IMAGE_WIDTH> "image width in pixel"
+            )
+            .required(false)
+            .default_value("480")
+            .validator(|s| s.parse::<usize>())
+        )
+        .arg(
+            arg!(
+                -y --"image-height" <IMAGE_HEIGHT> "image height in pixel"
+            )
+            .required(false)
+            .default_value("360")
+            .validator(|s| s.parse::<usize>())
+        )
+        .arg(
+            arg!(
+                -s --"samples-per-pixel" <SAMPLES_PER_PIXEL> "per pixel over-sampling. 500 for good results. Beware: time-consuming"
+            )
+            .required(false)
+            .default_value("100")
+            .validator(|s| s.parse::<usize>())
+        )
+        .arg(
+            arg!(
+                -t --threads <THREADS> "maximum threads to be used in parallel. 0 = all logical CPUs"
+            )
+            .required(false)
+            .takes_value(true)
+            .default_value("0")
+            .validator(|s| s.parse::<usize>())
+        )
+        .get_matches();
+
+    let threads: usize = matches.value_of_t("threads").unwrap();
+    let samples_per_pixel: usize = matches.value_of_t("samples-per-pixel").unwrap();
+
     rayon::ThreadPoolBuilder::new()
-        .num_threads(args.threads)
+        .num_threads(threads)
         .build_global()
         .unwrap();
 
     let mut rng = thread_rng();
 
     // Image
-    let image_width = args.image_width;
-    let image_height = args.image_height;
-    let ascpect_ratio = args.image_width as f64 / args.image_height as f64;
+    let image_width: usize = matches.value_of_t("image-width").unwrap();
+    let image_height: usize = matches.value_of_t("image-height").unwrap();
+    let ascpect_ratio = image_width as f64 / image_height as f64;
     const MAX_DEPTH: usize = 50;
 
     // World
@@ -76,8 +99,10 @@ fn main() {
     let world_ref = &world;
     let bar = &Box::new(ProgressBar::new((image_width * image_height) as u64));
     bar.set_prefix("   Rendering");
-    bar.set_style(ProgressStyle::default_bar()
-        .template("{prefix:.white} [{eta_precise}] {wide_bar} {pos:>7}/{len:7} ({percent}%)"));
+    bar.set_style(
+        ProgressStyle::default_bar()
+            .template("{prefix:.white} [{eta_precise}] {wide_bar} {pos:>7}/{len:7} ({percent}%)"),
+    );
     bar.set_draw_rate(25);
 
     let image: Vec<Color> = (0..image_height)
@@ -85,7 +110,7 @@ fn main() {
         .rev()
         .flat_map(|y| {
             (0..image_width).into_par_iter().map(move |x| {
-                let sampled_pixel = (0..args.samples_per_pixel)
+                let sampled_pixel = (0..samples_per_pixel)
                     .map(move |_| {
                         let mut rng = thread_rng();
                         let u = (x as f64 + rng.gen_range(0.0..1.0)) / (image_width - 1) as f64;
@@ -106,7 +131,7 @@ fn main() {
     // Serialize to PNM
     let mut pnm_data = format!("P3\n{} {}\n255\n\n", image_width, image_height);
     for pixel in image {
-        pnm_data += &pixel.pnm_color(args.samples_per_pixel);
+        pnm_data += &pixel.pnm_color(samples_per_pixel);
     }
 
     match load_from_memory_with_format(&pnm_data.into_bytes(), ImageFormat::Pnm) {
