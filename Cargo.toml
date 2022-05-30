@@ -16,5 +16,6 @@ rand = "0.8"
 rayon = "1.5"
 
 [build-dependencies]
-vergen = { version = "7", default-features = false, features = ["git"] }
 anyhow = "1.0"
+approx = "0.5"
+vergen = { version = "7", default-features = false, features = ["git"] }
