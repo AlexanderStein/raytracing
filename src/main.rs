@@ -7,10 +7,7 @@ use clap::Parser;
 use image::{load_from_memory_with_format, ImageFormat};
 use rand::prelude::*;
 use rayon::prelude::*;
-use std::sync::{
-    atomic::{AtomicUsize, Ordering},
-    Arc,
-};
+use indicatif::{ProgressBar, ProgressStyle};
 
 mod camera;
 mod color;
@@ -77,17 +74,16 @@ fn main() {
     // Render
     let camera_ref = &camera;
     let world_ref = &world;
-    let scanlines = Arc::new(AtomicUsize::new(image_height));
+    let bar = &Box::new(ProgressBar::new((image_width * image_height) as u64));
+    bar.set_prefix("   Rendering");
+    bar.set_style(ProgressStyle::default_bar()
+        .template("{prefix:.white} [{eta_precise}] {wide_bar} {pos:>7}/{len:7} ({percent}%)"));
+    bar.set_draw_rate(25);
+
     let image: Vec<Color> = (0..image_height)
         .into_par_iter()
         .rev()
         .flat_map(|y| {
-            let scanlines_left = scanlines.fetch_sub(1, Ordering::SeqCst);
-            eprint!(
-                "\rScanlines remaining: {} ({})%",
-                scanlines_left,
-                ((1.0 - (scanlines_left as f32 / image_height as f32)) * 100.0) as u16
-            );
             (0..image_width).into_par_iter().map(move |x| {
                 let sampled_pixel = (0..args.samples_per_pixel)
                     .map(move |_| {
@@ -98,17 +94,20 @@ fn main() {
                         ray.color(world_ref, MAX_DEPTH, &mut rng)
                     })
                     .sum();
+                bar.inc(1);
+
                 sampled_pixel
             })
         })
         .collect();
+
+    bar.finish();
 
     // Serialize to PNM
     let mut pnm_data = format!("P3\n{} {}\n255\n\n", image_width, image_height);
     for pixel in image {
         pnm_data += &pixel.pnm_color(args.samples_per_pixel);
     }
-    eprintln!("");
 
     match load_from_memory_with_format(&pnm_data.into_bytes(), ImageFormat::Pnm) {
         Ok(img) => img.save("raytracer.png").unwrap(),
