@@ -784,6 +784,7 @@ dependencies = [
  "clap",
  "image",
  "indicatif",
+ "num_cpus",
  "rand",
  "rayon",
  "vergen",

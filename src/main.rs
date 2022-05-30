@@ -6,6 +6,7 @@ use crate::{camera::Camera, color::*, vec3::*, world::random_scene};
 use clap::{arg, command};
 use image::{load_from_memory_with_format, ImageFormat};
 use indicatif::{ProgressBar, ProgressStyle};
+use num_cpus;
 use rand::prelude::*;
 use rayon::prelude::*;
 
@@ -49,11 +50,10 @@ fn main() {
         )
         .arg(
             arg!(
-                -t --threads <THREADS> "maximum threads to be used in parallel. 0 = all logical CPUs"
+                -t --threads <THREADS> "maximum threads to be used in parallel. Default: all physical CPUs"
             )
             .required(false)
-            .takes_value(true)
-            .default_value("0")
+            .default_value(&format!("{}", num_cpus::get_physical()))
             .validator(|s| s.parse::<usize>())
         )
         .get_matches();
