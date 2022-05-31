@@ -78,9 +78,21 @@ fn main() {
     let world = random_scene(&mut rng);
 
     // Camera
-    let lookfrom = Point3::new(13.0, 2.0, 3.0);
-    let lookat = Point3::new(0.0, 0.0, 0.0);
-    let vup = Vector3::new(0.0, 1.0, 0.0);
+    let lookfrom = Point3 {
+        x: 13.0,
+        y: 2.0,
+        z: 3.0,
+    };
+    let lookat = Point3 {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    };
+    let vup = Vector3 {
+        x: 0.0,
+        y: 1.0,
+        z: 0.0,
+    };
     let dist_to_focus = 10.0;
     let aperture = 0.1;
 
