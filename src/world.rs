@@ -1,5 +1,5 @@
 use crate::{color::*, hitable_list::HitableList, material::*, sphere::*};
-use cgmath::{InnerSpace, Point3};
+use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 
 pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
@@ -23,20 +23,36 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
             );
 
             if (center - Point3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
-                let sphere = if choose_mat < 0.8 {
+                if choose_mat < 0.8 {
                     // diffuse
                     let albedo = random_color(rng);
-                    Sphere::new(center, 0.2, Box::new(Lambertian::new(&albedo)))
+                    let center2 = center
+                        + Vector3 {
+                            x: 0.0,
+                            y: rng.gen_range(0.0..0.5),
+                            z: 0.0,
+                        };
+                    world.push(MovingSphere::new(
+                        center,
+                        center2,
+                        0.0,
+                        1.0,
+                        0.2,
+                        Box::new(Lambertian::new(&albedo)),
+                    ));
                 } else if choose_mat < 0.95 {
                     // metal
                     let albedo = random_color(rng);
                     let fuzz = rng.gen_range(0.0..1.0);
-                    Sphere::new(center, 0.2, Box::new(Metal::new(&albedo, fuzz)))
+                    world.push(Sphere::new(
+                        center,
+                        0.2,
+                        Box::new(Metal::new(&albedo, fuzz)),
+                    ));
                 } else {
                     // glass
-                    Sphere::new(center, 0.2, Box::new(Dielectric::new(1.5)))
+                    world.push(Sphere::new(center, 0.2, Box::new(Dielectric::new(1.5))));
                 };
-                world.push(sphere);
             }
         }
     }
