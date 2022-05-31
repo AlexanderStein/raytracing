@@ -1,6 +1,7 @@
 use crate::{
     color::{self, Color},
-    hitable::{HitableList, Hittable},
+    hitable::Hittable,
+    hitable_list::HitableList,
 };
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::RngCore;

@@ -13,6 +13,7 @@ use rayon::prelude::*;
 mod camera;
 mod color;
 mod hitable;
+mod hitable_list;
 mod material;
 mod ray;
 mod sphere;

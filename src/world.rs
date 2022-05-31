@@ -1,4 +1,4 @@
-use crate::{color::*, hitable::HitableList, material::*, sphere::*};
+use crate::{color::*, hitable_list::HitableList, material::*, sphere::*};
 use cgmath::{InnerSpace, Point3};
 use rand::{Rng, RngCore};
 
