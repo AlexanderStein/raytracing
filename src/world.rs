@@ -8,7 +8,11 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
 
     let ground_material = Box::new(Lambertian::new(&Color::new(0.5, 0.5, 0.5)));
     world.push(Sphere::new(
-        Point3::new(0.0, -1000.0, 0.0),
+        Point3 {
+            x: 0.0,
+            y: -1000.0,
+            z: 0.0,
+        },
         1000.0,
         ground_material,
     ));
@@ -16,13 +20,21 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
     for a in -11..11 {
         for b in -11..11 {
             let choose_mat: f64 = rng.gen_range(0.0..1.0);
-            let center = Point3::new(
-                a as f64 + 0.9 * rng.gen_range(0.0..1.0),
-                0.2,
-                b as f64 + 0.9 * rng.gen_range(0.0..1.0),
-            );
+            let center = Point3 {
+                x: a as f64 + 0.9 * rng.gen_range(0.0..1.0),
+                y: 0.2,
+                z: b as f64 + 0.9 * rng.gen_range(0.0..1.0),
+            };
 
-            if (center - Point3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
+            if (center
+                - Point3 {
+                    x: 4.0,
+                    y: 0.2,
+                    z: 0.0,
+                })
+            .magnitude()
+                > 0.9
+            {
                 if choose_mat < 0.8 {
                     // diffuse
                     let albedo = random_color(rng);
@@ -58,13 +70,37 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
     }
 
     let material1 = Box::new(Dielectric::new(1.5));
-    world.push(Sphere::new(Point3::new(0.0, 1.0, 0.0), 1.0, material1));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        1.0,
+        material1,
+    ));
 
     let material2 = Box::new(Lambertian::new(&Color::new(0.4, 0.2, 0.1)));
-    world.push(Sphere::new(Point3::new(-4.0, 1.0, 0.0), 1.0, material2));
+    world.push(Sphere::new(
+        Point3 {
+            x: -4.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        1.0,
+        material2,
+    ));
 
     let material3 = Box::new(Metal::new(&Color::new(0.7, 0.6, 0.5), 0.0));
-    world.push(Sphere::new(Point3::new(4.0, 1.0, 0.0), 1.0, material3));
+    world.push(Sphere::new(
+        Point3 {
+            x: 4.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        1.0,
+        material3,
+    ));
 
     world
 }
