@@ -1,6 +1,6 @@
 use crate::ray::Ray;
 use cgmath::{InnerSpace, Point3, Vector3};
-use rand::RngCore;
+use rand::{RngCore, Rng};
 use raytracer::random_in_unit_disk;
 
 pub struct Camera {
@@ -13,6 +13,10 @@ pub struct Camera {
     #[allow(dead_code)]
     w: Vector3<f64>,
     lens_radius: f64,
+    /// shutter open time
+    time0: f64,
+    /// shutter close time
+    time1: f64,
 }
 
 impl Camera {
@@ -24,6 +28,8 @@ impl Camera {
         aspect_ratio: f64,
         aperture: f64,
         focus_dist: f64,
+        time0: f64,
+        time1: f64,
     ) -> Self {
         let theta = vfov.to_radians();
         let h = (theta / 2.0).tan();
@@ -49,6 +55,8 @@ impl Camera {
             v,
             w,
             lens_radius,
+            time0,
+            time1,
         }
     }
 
@@ -58,6 +66,6 @@ impl Camera {
         let direction =
             self.lower_left_corner + s * self.horizontal + t * self.vertical - self.origin - offset;
 
-        Ray::new(self.origin + offset, direction)
+        Ray::new(self.origin + offset, direction, rng.gen_range(self.time0..self.time1))
     }
 }
