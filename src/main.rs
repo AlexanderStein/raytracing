@@ -100,7 +100,7 @@ fn main() {
     bar.set_prefix("   Rendering");
     bar.set_style(
         ProgressStyle::default_bar()
-            .template("{prefix:.white} [{eta_precise}] {wide_bar} {pos:>7}/{len:7} ({percent}%)"),
+            .template("{prefix:.white} [{elapsed_precise}] [{eta_precise}] {wide_bar} {pos:>7}/{len:7} ({percent}%)"),
     );
     bar.set_draw_rate(25);
 
