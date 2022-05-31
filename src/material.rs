@@ -21,7 +21,7 @@ fn refract(uv: Vector3<f64>, n: Vector3<f64>, etai_over_etat: f64) -> Vector3<f6
     r_out_perp + r_out_parallel
 }
 
-pub trait MaterialTrait: Send + Sync {
+pub trait Material: Send + Sync {
     fn scatter(&self, ray: &Ray, record: &HitRecord, rng: &mut dyn RngCore)
         -> Option<(Color, Ray)>;
 }
@@ -36,7 +36,7 @@ impl Lambertian {
     }
 }
 
-impl MaterialTrait for Lambertian {
+impl Material for Lambertian {
     fn scatter(
         &self,
         _ray: &Ray,
@@ -72,7 +72,7 @@ impl Metal {
     }
 }
 
-impl MaterialTrait for Metal {
+impl Material for Metal {
     fn scatter(
         &self,
         ray: &Ray,
@@ -109,7 +109,7 @@ impl Dielectric {
     }
 }
 
-impl MaterialTrait for Dielectric {
+impl Material for Dielectric {
     fn scatter(
         &self,
         ray: &Ray,

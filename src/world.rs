@@ -23,7 +23,7 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
             );
 
             if (center - Point3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
-                let sphere_material: Box<dyn MaterialTrait> = if choose_mat < 0.8 {
+                let sphere_material: Box<dyn Material> = if choose_mat < 0.8 {
                     // diffuse
                     let albedo = random_color(rng);
                     Box::new(Lambertian::new(&albedo))

@@ -1,15 +1,15 @@
-use crate::{hitable::*, material::MaterialTrait};
+use crate::{hitable::*, material::Material};
 use cgmath::*;
 use std::option::Option;
 
 pub struct Sphere {
     center: Point3<f64>,
     radius: f64,
-    material: Box<dyn MaterialTrait>,
+    material: Box<dyn Material>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3<f64>, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
+    pub fn new(center: Point3<f64>, radius: f64, material: Box<dyn Material>) -> Self {
         Self {
             center,
             radius,
