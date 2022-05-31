@@ -2,3 +2,4 @@
 *.json
 *.png
 plot.html
+.venv
