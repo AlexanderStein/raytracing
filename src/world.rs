@@ -23,20 +23,20 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
             );
 
             if (center - Point3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
-                let sphere_material: Box<dyn Material> = if choose_mat < 0.8 {
+                let sphere = if choose_mat < 0.8 {
                     // diffuse
                     let albedo = random_color(rng);
-                    Box::new(Lambertian::new(&albedo))
+                    Sphere::new(center, 0.2, Box::new(Lambertian::new(&albedo)))
                 } else if choose_mat < 0.95 {
                     // metal
                     let albedo = random_color(rng);
                     let fuzz = rng.gen_range(0.0..1.0);
-                    Box::new(Metal::new(&albedo, fuzz))
+                    Sphere::new(center, 0.2, Box::new(Metal::new(&albedo, fuzz)))
                 } else {
                     // glass
-                    Box::new(Dielectric::new(1.5))
+                    Sphere::new(center, 0.2, Box::new(Dielectric::new(1.5)))
                 };
-                world.push(Sphere::new(center, 0.2, sphere_material));
+                world.push(sphere);
             }
         }
     }
