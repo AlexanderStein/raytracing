@@ -1,5 +1,5 @@
 use crate::{
-    color::{self,Color},
+    color::{self, Color},
     hitable::{HitableList, Hittable},
 };
 use cgmath::{InnerSpace, Point3, Vector3};
@@ -8,11 +8,16 @@ use rand::RngCore;
 pub struct Ray {
     origin: Point3<f64>,
     direction: Vector3<f64>,
+    time: f64,
 }
 
 impl Ray {
-    pub fn new(origin: Point3<f64>, direction: Vector3<f64>) -> Self {
-        Ray { origin, direction }
+    pub fn new(origin: Point3<f64>, direction: Vector3<f64>, time: f64) -> Self {
+        Ray {
+            origin,
+            direction,
+            time,
+        }
     }
 
     pub fn origin(&self) -> Point3<f64> {
@@ -21,6 +26,10 @@ impl Ray {
 
     pub fn direction(&self) -> Vector3<f64> {
         self.direction
+    }
+
+    pub fn time(&self) -> f64 {
+        self.time
     }
 
     pub fn at(&self, t: f64) -> Point3<f64> {
