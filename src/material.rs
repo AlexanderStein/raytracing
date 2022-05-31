@@ -1,5 +1,25 @@
-use crate::{color::Color, hitable::HitRecord, ray::Ray, vec3::*};
+use crate::{color::Color, hitable::HitRecord, ray::Ray};
+use cgmath::{InnerSpace, Vector3};
 use rand::{Rng, RngCore};
+use raytracer::{random_in_unit_sphere, random_unit_vector};
+
+// Return true if the vector is close to zero in all dimensions.
+fn near_zero(v: Vector3<f64>) -> bool {
+    const EPSILON: f64 = 1e-8;
+    v.x.abs() < EPSILON && v.y.abs() < EPSILON && v.z.abs() < EPSILON
+}
+
+fn reflect(v: Vector3<f64>, n: Vector3<f64>) -> Vector3<f64> {
+    v - 2.0 * v.dot(n) * n
+}
+
+fn refract(uv: Vector3<f64>, n: Vector3<f64>, etai_over_etat: f64) -> Vector3<f64> {
+    let cos_theta = (-uv).dot(n).min(1.0);
+
+    let r_out_perp = etai_over_etat * (uv + cos_theta * n);
+    let r_out_parallel = -((1.0 - r_out_perp.magnitude2()).abs().sqrt()) * n;
+    r_out_perp + r_out_parallel
+}
 
 pub trait MaterialTrait: Send + Sync {
     fn scatter(&self, ray: &Ray, record: &HitRecord, rng: &mut dyn RngCore)
@@ -23,10 +43,10 @@ impl MaterialTrait for Lambertian {
         record: &HitRecord,
         rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
-        let scatter_direction = record.normal + Vec3::random_unit_vector(rng);
+        let scatter_direction = record.normal + random_unit_vector(rng);
 
         // Catch degenerate scatter direction
-        let scatter_direction = if scatter_direction.near_zero() {
+        let scatter_direction = if near_zero(scatter_direction) {
             record.normal
         } else {
             scatter_direction
@@ -59,12 +79,12 @@ impl MaterialTrait for Metal {
         record: &HitRecord,
         rng: &mut dyn RngCore,
     ) -> Option<(Color, Ray)> {
-        let reflected = ray.direction().unit_vector().reflect(&record.normal);
+        let reflected = reflect(ray.direction().normalize(), record.normal);
         let scattered = Ray::new(
             record.p,
-            reflected + self.fuzz * Vec3::random_in_unit_sphere(rng),
+            reflected + (self.fuzz * random_in_unit_sphere(rng)),
         );
-        if scattered.direction().dot(&record.normal) > 0.0 {
+        if scattered.direction().dot(record.normal) > 0.0 {
             Some((self.albedo, scattered))
         } else {
             None
@@ -103,17 +123,17 @@ impl MaterialTrait for Dielectric {
             self.refraction_index
         };
 
-        let unit_direction = ray.direction().unit_vector();
-        let cos_theta = (-unit_direction).dot(&record.normal).min(1.0);
+        let unit_direction = ray.direction().normalize();
+        let cos_theta = (-unit_direction).dot(record.normal).min(1.0);
         let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
 
         let cannot_refract = refraction_ratio * sin_theta > 1.0;
         let direction = if cannot_refract
             || Self::reflectance(cos_theta, refraction_ratio) > rng.gen_range(0.0..1.0)
         {
-            unit_direction.reflect(&record.normal)
+            reflect(unit_direction, record.normal)
         } else {
-            unit_direction.refract(&record.normal, refraction_ratio)
+            refract(unit_direction, record.normal, refraction_ratio)
         };
         let scattered = Ray::new(record.p, direction);
         Some((attenuation, scattered))

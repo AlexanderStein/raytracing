@@ -2,7 +2,8 @@
 #[macro_use]
 extern crate approx;
 
-use crate::{camera::Camera, color::*, vec3::*, world::random_scene};
+use crate::{camera::Camera, color::*, world::random_scene};
+use cgmath::{Point3, Vector3};
 use clap::{arg, command};
 use image::{load_from_memory_with_format, ImageFormat};
 use indicatif::{ProgressBar, ProgressStyle};
@@ -15,7 +16,6 @@ mod hitable;
 mod material;
 mod ray;
 mod sphere;
-mod vec3;
 mod world;
 
 fn main() {
@@ -78,15 +78,15 @@ fn main() {
 
     // Camera
     let lookfrom = Point3::new(13.0, 2.0, 3.0);
-    let lookat = Point3::zero();
-    let vup = Vec3::new(0.0, 1.0, 0.0);
+    let lookat = Point3::new(0.0, 0.0, 0.0);
+    let vup = Vector3::new(0.0, 1.0, 0.0);
     let dist_to_focus = 10.0;
     let aperture = 0.1;
 
     let camera = Camera::new(
-        &lookfrom,
-        &lookat,
-        &vup,
+        lookfrom,
+        lookat,
+        vup,
         20.0,
         ascpect_ratio,
         aperture,
@@ -130,7 +130,7 @@ fn main() {
     // Serialize to PNM
     let mut pnm_data = format!("P3\n{} {}\n255\n\n", image_width, image_height);
     for pixel in image {
-        pnm_data += &pixel.pnm_color(samples_per_pixel);
+        pnm_data += &pnm_color(pixel, samples_per_pixel);
     }
 
     match load_from_memory_with_format(&pnm_data.into_bytes(), ImageFormat::Pnm) {

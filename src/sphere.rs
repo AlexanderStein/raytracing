@@ -1,14 +1,15 @@
-use crate::{hitable::*, material::MaterialTrait, vec3::*};
+use crate::{hitable::*, material::MaterialTrait};
+use cgmath::*;
 use std::option::Option;
 
 pub struct Sphere {
-    center: Point3,
+    center: Point3<f64>,
     radius: f64,
     material: Box<dyn MaterialTrait>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
+    pub fn new(center: Point3<f64>, radius: f64, material: Box<dyn MaterialTrait>) -> Self {
         Self {
             center,
             radius,
@@ -20,9 +21,9 @@ impl Sphere {
 impl Hittable for Sphere {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = ray.origin() - self.center;
-        let a = ray.direction().length_squared();
-        let half_b = oc.dot(&ray.direction());
-        let c = oc.length_squared() - self.radius * self.radius;
+        let a = ray.direction().magnitude2();
+        let half_b = oc.dot(ray.direction());
+        let c = oc.magnitude2() - self.radius * self.radius;
         let discriminant = half_b * half_b - a * c;
         if discriminant < 0.0 {
             return None;
@@ -38,15 +39,16 @@ impl Hittable for Sphere {
             }
         }
 
+        let p = ray.at(root);
+        let outward_normal = (p - self.center) / self.radius;
         let mut record = HitRecord {
-            p: ray.at(root),
-            normal: Vec3::zero(),
+            p,
+            normal: outward_normal,
             material: self.material.as_ref(),
             t: root,
             front_face: false,
         };
-        let outward_normal = (record.p - self.center) / self.radius;
-        record.set_face_normal(ray, &outward_normal);
+        record.set_face_normal(ray, outward_normal);
         Some(record)
     }
 }

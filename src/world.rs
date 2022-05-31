@@ -1,4 +1,5 @@
-use crate::{color::*, hitable::HitableList, material::*, sphere::*, vec3::*};
+use crate::{color::*, hitable::HitableList, material::*, sphere::*};
+use cgmath::{InnerSpace, Point3};
 use rand::{Rng, RngCore};
 
 pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
@@ -21,14 +22,14 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
                 b as f64 + 0.9 * rng.gen_range(0.0..1.0),
             );
 
-            if (center - Point3::new(4.0, 0.2, 0.0)).length() > 0.9 {
+            if (center - Point3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
                 let sphere_material: Box<dyn MaterialTrait> = if choose_mat < 0.8 {
                     // diffuse
-                    let albedo = Color::random(rng, 0.0..1.0) * Color::random(rng, 0.0..1.0);
+                    let albedo = random_color(rng);
                     Box::new(Lambertian::new(&albedo))
                 } else if choose_mat < 0.95 {
                     // metal
-                    let albedo = Color::random(rng, 0.5..1.0);
+                    let albedo = random_color(rng);
                     let fuzz = rng.gen_range(0.0..1.0);
                     Box::new(Metal::new(&albedo, fuzz))
                 } else {
