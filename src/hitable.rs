@@ -4,7 +4,7 @@ use std::option::Option;
 pub struct HitRecord<'a> {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: &'a Box<dyn MaterialTrait>,
+    pub material: &'a dyn MaterialTrait,
     pub t: f64,
     pub front_face: bool,
 }

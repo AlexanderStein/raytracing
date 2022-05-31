@@ -29,7 +29,7 @@ impl Ray {
 
     pub fn color(&self, world: &HitableList, depth: usize, rng: &mut dyn RngCore) -> Color {
         // If we've exceeded the ray bounce limit, no more light is gathered.
-        if depth <= 0 {
+        if depth == 0 {
             return Color::zero();
         }
 

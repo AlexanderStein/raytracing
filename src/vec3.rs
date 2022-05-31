@@ -55,7 +55,7 @@ impl Vec3 {
     pub fn random(rng: &mut dyn RngCore, range: Range<f64>) -> Vec3 {
         let x = rng.gen_range(range.clone());
         let y = rng.gen_range(range.clone());
-        let z = rng.gen_range(range.clone());
+        let z = rng.gen_range(range);
         Vec3 { e: [x, y, z] }
     }
 
@@ -122,9 +122,9 @@ impl Display for Vec3 {
 }
 
 impl iter::Sum for Vec3 {
-    fn sum<I: Iterator<Item = Self>>(mut iter: I) -> Self {
+    fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
         let mut result = Vec3::zero();
-        while let Some(v) = iter.next() {
+        for v in iter {
             result += v;
         }
         result

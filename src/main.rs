@@ -6,7 +6,6 @@ use crate::{camera::Camera, color::*, vec3::*, world::random_scene};
 use clap::{arg, command};
 use image::{load_from_memory_with_format, ImageFormat};
 use indicatif::{ProgressBar, ProgressStyle};
-use num_cpus;
 use rand::prelude::*;
 use rayon::prelude::*;
 
