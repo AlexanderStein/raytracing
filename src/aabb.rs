@@ -1,6 +1,7 @@
 use crate::ray::*;
 use cgmath::Point3;
 
+#[derive(Clone, Copy)]
 pub struct AABB {
     minimum: Point3<f64>,
     maximum: Point3<f64>,
