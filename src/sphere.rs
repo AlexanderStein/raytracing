@@ -137,6 +137,6 @@ impl Hittable for MovingSphere {
             self.center(time1) - Vector3::new(self.radius, self.radius, self.radius),
             self.center(time1) + Vector3::new(self.radius, self.radius, self.radius),
         );
-        Some(AABB::surrounding_box(box0, box1))
+        Some(AABB::surrounding_box(&box0, &box1))
     }
 }

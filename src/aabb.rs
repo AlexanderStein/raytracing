@@ -34,7 +34,7 @@ impl AABB {
         true
     }
 
-    pub fn surrounding_box(box0: AABB, box1: AABB) -> Self {
+    pub fn surrounding_box(box0: &AABB, box1: &AABB) -> Self {
         let small = Point3 {
             x: box0.min().x.min(box1.min().x),
             y: box0.min().y.min(box1.min().y),
