@@ -70,7 +70,14 @@ pub struct MovingSphere {
 }
 
 impl MovingSphere {
-    pub fn new(center0: Point3<f64>, center1: Point3<f64>, time0: f64, time1: f64, radius: f64, material: Box<dyn Material>) -> Self {
+    pub fn new(
+        center0: Point3<f64>,
+        center1: Point3<f64>,
+        time0: f64,
+        time1: f64,
+        radius: f64,
+        material: Box<dyn Material>,
+    ) -> Self {
         Self {
             center0,
             center1,
@@ -82,7 +89,8 @@ impl MovingSphere {
     }
 
     pub fn center(&self, time: f64) -> Point3<f64> {
-        self.center0 + ((time - self.time0) / (self.time1 - self.time0)) * (self.center1 - self.center0)
+        self.center0
+            + ((time - self.time0) / (self.time1 - self.time0)) * (self.center1 - self.center0)
     }
 }
 
