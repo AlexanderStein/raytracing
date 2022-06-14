@@ -1,4 +1,9 @@
-use crate::{hitable::{HitRecord,Hittable}, ray::*};
+use crate::{
+    aabb::AABB,
+    hitable::{HitRecord, Hittable},
+    ray::*,
+};
+use cgmath::Point3;
 use std::option::Option;
 
 pub struct HitableList {
@@ -27,5 +32,35 @@ impl Hittable for HitableList {
         }
 
         hit_anything
+    }
+
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
+        if self.objects.is_empty() {
+            None
+        } else {
+            self.objects.iter().fold(None, |bounding_box, obj| {
+                match obj.bounding_box(time0, time1) {
+                    None => return None,
+                    Some(obj_box) => {
+                        if bounding_box.is_none() {
+                            Some(AABB::new(
+                                Point3 {
+                                    x: 0.0,
+                                    y: 0.0,
+                                    z: 0.0,
+                                },
+                                Point3 {
+                                    x: 0.0,
+                                    y: 0.0,
+                                    z: 0.0,
+                                },
+                            ))
+                        } else {
+                            Some(AABB::surrounding_box(bounding_box.unwrap(), obj_box))
+                        }
+                    }
+                }
+            })
+        }
     }
 }

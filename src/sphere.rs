@@ -1,4 +1,4 @@
-use crate::{hitable::*, material::Material};
+use crate::{aabb::AABB, hitable::*, material::Material};
 use cgmath::*;
 use std::option::Option;
 
@@ -50,6 +50,13 @@ impl Hittable for Sphere {
         };
         record.set_face_normal(ray, outward_normal);
         Some(record)
+    }
+
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
+        Some(AABB::new(
+            self.center - Vector3::new(self.radius, self.radius, self.radius),
+            self.center + Vector3::new(self.radius, self.radius, self.radius),
+        ))
     }
 }
 
@@ -111,5 +118,17 @@ impl Hittable for MovingSphere {
         };
         record.set_face_normal(ray, outward_normal);
         Some(record)
+    }
+
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
+        let box0 = AABB::new(
+            self.center(time0) - Vector3::new(self.radius, self.radius, self.radius),
+            self.center(time0) + Vector3::new(self.radius, self.radius, self.radius),
+        );
+        let box1 = AABB::new(
+            self.center(time1) - Vector3::new(self.radius, self.radius, self.radius),
+            self.center(time1) + Vector3::new(self.radius, self.radius, self.radius),
+        );
+        Some(AABB::surrounding_box(box0, box1))
     }
 }
