@@ -11,6 +11,7 @@ use rand::prelude::*;
 use rayon::prelude::*;
 
 mod aabb;
+mod bvh;
 mod camera;
 mod color;
 mod hitable;
