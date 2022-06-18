@@ -4,8 +4,16 @@ use crate::color::Color;
 
 pub trait Texture: Send + Sync {
     fn value(&self, p: &Point3<f64>) -> Color;
+    fn box_clone(&self) -> Box<dyn Texture>;
 }
 
+impl Clone for Box<dyn Texture> {
+    fn clone(&self) -> Box<dyn Texture> {
+        self.box_clone()
+    }
+}
+
+#[derive(Clone)]
 pub struct SolidColor {
     color: Color,
 }
@@ -20,8 +28,13 @@ impl Texture for SolidColor {
     fn value(&self, _: &Point3<f64>) -> Color {
         self.color
     }
+
+    fn box_clone(&self) -> Box<dyn Texture> {
+        Box::new((*self).clone())
+    }
 }
 
+#[derive(Clone)]
 pub struct CheckerTexture {
     odd: Box<dyn Texture>,
     even: Box<dyn Texture>,
@@ -41,5 +54,9 @@ impl Texture for CheckerTexture {
         } else {
             self.even.value(p)
         }
+    }
+
+    fn box_clone(&self) -> Box<dyn Texture> {
+        Box::new((*self).clone())
     }
 }
