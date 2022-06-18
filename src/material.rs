@@ -31,8 +31,7 @@ pub struct Lambertian {
 }
 
 impl Lambertian {
-    pub fn new(color: &Color) -> Self {
-        let albedo = Box::new(SolidColor::new(color));
+    pub fn new(albedo: Box<dyn Texture>) -> Self {
         Self { albedo }
     }
 }

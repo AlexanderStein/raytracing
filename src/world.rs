@@ -1,4 +1,4 @@
-use crate::{color::*, hitable_list::HitableList, material::*, sphere::*};
+use crate::{color::*, hitable_list::HitableList, material::*, sphere::*, texture::*};
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 
@@ -6,7 +6,11 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
     // TODO: Create Vec<Box<dyn Hittable>> first and pass this to world
     let mut world = HitableList::new();
 
-    let ground_material = Box::new(Lambertian::new(&Color::new(0.5, 0.5, 0.5)));
+    let checker_texture = Box::new(CheckerTexture::new(
+        Box::new(SolidColor::new(&Color::new(0.2, 0.3, 0.1))),
+        Box::new(SolidColor::new(&Color::new(0.9, 0.9, 0.9))),
+    ));
+    let ground_material = Box::new(Lambertian::new(checker_texture));
     world.push(Sphere::new(
         Point3 {
             x: 0.0,
@@ -37,7 +41,7 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
             {
                 if choose_mat < 0.8 {
                     // diffuse
-                    let albedo = random_color(rng);
+                    let albedo = Box::new(SolidColor::new(&random_color(rng)));
                     let center2 = center
                         + Vector3 {
                             x: 0.0,
@@ -50,7 +54,7 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
                         0.0,
                         1.0,
                         0.2,
-                        Box::new(Lambertian::new(&albedo)),
+                        Box::new(Lambertian::new(albedo)),
                     ));
                 } else if choose_mat < 0.95 {
                     // metal
@@ -80,7 +84,8 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
         material1,
     ));
 
-    let material2 = Box::new(Lambertian::new(&Color::new(0.4, 0.2, 0.1)));
+    let color2 = Box::new(SolidColor::new(&Color::new(0.4, 0.2, 0.1)));
+    let material2 = Box::new(Lambertian::new(color2));
     world.push(Sphere::new(
         Point3 {
             x: -4.0,
