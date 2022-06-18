@@ -59,11 +59,14 @@ impl Hittable for Sphere {
 
         let p = ray.at(root);
         let outward_normal = (p - self.center) / self.radius;
+        let (u, v) = self.uv(outward_normal);
         let mut record = HitRecord {
             p,
             normal: outward_normal,
             material: self.material.as_ref(),
             t: root,
+            u,
+            v,
             front_face: false,
         };
         record.set_face_normal(ray, outward_normal);
@@ -137,11 +140,14 @@ impl Hittable for MovingSphere {
 
         let p = ray.at(root);
         let outward_normal = (p - self.center(ray.time())) / self.radius;
+        let (u, v) = self.uv(outward_normal);
         let mut record = HitRecord {
             p,
             normal: outward_normal,
             material: self.material.as_ref(),
             t: root,
+            u,
+            v,
             front_face: false,
         };
         record.set_face_normal(ray, outward_normal);

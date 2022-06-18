@@ -7,6 +7,8 @@ pub struct HitRecord<'a> {
     pub normal: Vector3<f64>,
     pub material: &'a dyn Material,
     pub t: f64,
+    pub u: f64,
+    pub v: f64,
     pub front_face: bool,
 }
 
