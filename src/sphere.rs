@@ -1,12 +1,30 @@
 use crate::{aabb::AABB, hitable::*, material::Material};
 use cgmath::*;
+use std::f64::consts::PI;
 use std::option::Option;
+
+trait SphereFunc {
+    // p: a given point on the sphere of radius one, centered at the origin.
+    // u: returned value [0,1] of angle around the Y axis from X=-1.
+    // v: returned value [0,1] of angle from Y=-1 to Y=+1.
+    //     <1 0 0> yields <0.50 0.50>       <-1  0  0> yields <0.00 0.50>
+    //     <0 1 0> yields <0.50 1.00>       < 0 -1  0> yields <0.50 0.00>
+    //     <0 0 1> yields <0.25 0.50>       < 0  0 -1> yields <0.75 0.50>
+    fn uv(&self, p: Vector3<f64>) -> (f64, f64) {
+        let theta = (-p.y).acos();
+        let phi = (-p.z).atan2(p.x) + PI;
+
+        (phi / (2.0 * PI), theta / PI)
+    }
+}
 
 pub struct Sphere {
     center: Point3<f64>,
     radius: f64,
     material: Box<dyn Material>,
 }
+
+impl SphereFunc for Sphere {}
 
 impl Sphere {
     pub fn new(center: Point3<f64>, radius: f64, material: Box<dyn Material>) -> Self {
@@ -68,6 +86,8 @@ pub struct MovingSphere {
     radius: f64,
     material: Box<dyn Material>,
 }
+
+impl SphereFunc for MovingSphere {}
 
 impl MovingSphere {
     pub fn new(
