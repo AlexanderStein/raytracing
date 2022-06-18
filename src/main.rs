@@ -19,6 +19,7 @@ mod hitable_list;
 mod material;
 mod ray;
 mod sphere;
+mod texture;
 mod world;
 
 fn main() {
