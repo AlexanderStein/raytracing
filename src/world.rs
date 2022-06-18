@@ -109,3 +109,32 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
 
     world
 }
+
+pub fn two_spheres() -> HitableList {
+    let mut world = HitableList::new();
+
+    let checker = Box::new(CheckerTexture::new(
+        Box::new(SolidColor::new(&Color::new(0.2, 0.3, 0.1))),
+        Box::new(SolidColor::new(&Color::new(0.9, 0.9, 0.9))),
+    ));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: -10.0,
+            z: 0.0,
+        },
+        10.0,
+        Box::new(Lambertian::new(checker.clone())),
+    ));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 10.0,
+            z: 0.0,
+        },
+        10.0,
+        Box::new(Lambertian::new(checker)),
+    ));
+
+    world
+}
