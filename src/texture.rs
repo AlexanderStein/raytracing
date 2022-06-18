@@ -1,7 +1,9 @@
+use cgmath::Point3;
+
 use crate::color::Color;
 
 pub trait Texture: Send + Sync {
-    fn value(&self) -> Color;
+    fn value(&self, p: &Point3<f64>) -> Color;
 }
 
 pub struct SolidColor {
@@ -15,7 +17,7 @@ impl SolidColor {
 }
 
 impl Texture for SolidColor {
-    fn value(&self) -> Color {
+    fn value(&self, _: &Point3<f64>) -> Color {
         self.color
     }
 }

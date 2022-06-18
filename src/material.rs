@@ -54,7 +54,7 @@ impl Material for Lambertian {
         };
 
         let scattered = Ray::new(record.p, scatter_direction, ray.time());
-        Some((self.albedo.value(), scattered))
+        Some((self.albedo.value(&record.p), scattered))
     }
 }
 
