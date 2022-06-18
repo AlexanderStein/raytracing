@@ -1,4 +1,4 @@
-use crate::{color::Color, hitable::HitRecord, ray::Ray};
+use crate::{color::Color, hitable::HitRecord, ray::Ray, texture::*};
 use cgmath::{InnerSpace, Vector3};
 use rand::{Rng, RngCore};
 use raytracer::{random_in_unit_sphere, random_unit_vector};
@@ -27,12 +27,13 @@ pub trait Material: Send + Sync {
 }
 
 pub struct Lambertian {
-    albedo: Color,
+    albedo: Box<dyn Texture>,
 }
 
 impl Lambertian {
     pub fn new(color: &Color) -> Self {
-        Self { albedo: *color }
+        let albedo = Box::new(SolidColor::new(color));
+        Self { albedo }
     }
 }
 
@@ -53,7 +54,7 @@ impl Material for Lambertian {
         };
 
         let scattered = Ray::new(record.p, scatter_direction, ray.time());
-        Some((self.albedo, scattered))
+        Some((self.albedo.value(), scattered))
     }
 }
 
