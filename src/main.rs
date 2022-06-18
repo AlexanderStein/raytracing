@@ -2,7 +2,7 @@
 #[macro_use]
 extern crate approx;
 
-use crate::{camera::Camera, color::*, world::random_scene};
+use crate::{camera::Camera, color::*, world::*};
 use cgmath::{Point3, Vector3};
 use clap::{arg, command};
 use image::{load_from_memory_with_format, ImageFormat};
@@ -59,6 +59,14 @@ fn main() {
             .default_value(&format!("{}", num_cpus::get_physical()))
             .validator(|s| s.parse::<usize>())
         )
+        .arg(
+            arg!(
+                -w --world <world> "Select world"
+            )
+            .required(false)
+            .default_value("0")
+            .validator(|s| s.parse::<usize>())
+        )
         .get_matches();
 
     let threads: usize = matches.value_of_t("threads").unwrap();
@@ -78,32 +86,53 @@ fn main() {
     const MAX_DEPTH: usize = 50;
 
     // World
-    let world = random_scene(&mut rng);
+    let (world, lookfrom, lookat, vfov, aperture) = match matches.value_of_t("world").unwrap() {
+        1 => {
+            let lookfrom = Point3 {
+                x: 13.0,
+                y: 2.0,
+                z: 3.0,
+            };
+            let lookat = Point3 {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            };
+            let vfov = 20.0;
+            let aperture = 0.0;
+
+            (two_spheres(), lookfrom, lookat, vfov, aperture)
+        }
+        _ => {
+            let lookfrom = Point3 {
+                x: 13.0,
+                y: 2.0,
+                z: 3.0,
+            };
+            let lookat = Point3 {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            };
+            let vfov = 20.0;
+            let aperture = 0.1;
+            (random_scene(&mut rng), lookfrom, lookat, vfov, aperture)
+        }
+    };
 
     // Camera
-    let lookfrom = Point3 {
-        x: 13.0,
-        y: 2.0,
-        z: 3.0,
-    };
-    let lookat = Point3 {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0,
-    };
     let vup = Vector3 {
         x: 0.0,
         y: 1.0,
         z: 0.0,
     };
     let dist_to_focus = 10.0;
-    let aperture = 0.1;
 
     let camera = Camera::new(
         lookfrom,
         lookat,
         vup,
-        20.0,
+        vfov,
         ascpect_ratio,
         aperture,
         dist_to_focus,
