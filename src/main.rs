@@ -17,6 +17,7 @@ mod color;
 mod hitable;
 mod hitable_list;
 mod material;
+mod perlin;
 mod ray;
 mod sphere;
 mod texture;
