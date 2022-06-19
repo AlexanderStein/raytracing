@@ -186,6 +186,31 @@ fn main() {
                     background,
                 )
             }
+            5 => {
+                // Run with -s 200 -x 600 -y 600
+                let lookfrom = Point3 {
+                    x: 278.0,
+                    y: 278.0,
+                    z: -800.0,
+                };
+                let lookat = Point3 {
+                    x: 278.0,
+                    y: 278.0,
+                    z: 0.0,
+                };
+                let vfov = 40.0;
+                let aperture = 0.0;
+                let background = color::black();
+
+                (
+                    world::cornell_box(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
             _ => {
                 let lookfrom = Point3 {
                     x: 13.0,
