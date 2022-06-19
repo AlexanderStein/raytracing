@@ -89,3 +89,50 @@ impl Texture for NoiseTexture {
         Box::new((*self).clone())
     }
 }
+
+const BYTES_PER_PIXEL: usize = 3;
+
+#[derive(Clone)]
+pub struct ImageTexture {
+    data: Vec<u8>,
+    width: usize,
+    height: usize,
+}
+
+impl ImageTexture {
+    pub fn new(data: Vec<u8>, width: usize, height: usize) -> Self {
+        Self {
+            data,
+            width,
+            height,
+        }
+    }
+}
+
+impl Texture for ImageTexture {
+    fn value(&self, u: f64, v: f64, _p: &Point3<f64>) -> Color {
+        // Clamp input to texture coordinates to [0,1] x [1,0]
+        let u = u.clamp(0.0, 1.0);
+        let v = 1.0 - v.clamp(0.0, 1.0); // Flip V to image coordinates
+
+        let i = (u * self.width as f64) as usize;
+        let j = (v * self.height as f64) as usize;
+
+        // // Clamp integer mapping, since actual coordinates shoule be less than 1.0
+        let i = i.min(self.width - 1);
+        let j = j.min(self.height - 1);
+
+        let bytes_per_scanline = BYTES_PER_PIXEL * self.width;
+        let index = j * bytes_per_scanline + i * BYTES_PER_PIXEL;
+        let pixel = self.data.as_slice().get(index..index+BYTES_PER_PIXEL).unwrap();
+        let r = pixel[0] as f64 / 255.0;
+        let g = pixel[1] as f64 / 255.0;
+        let b = pixel[2] as f64 / 255.0;
+
+        Color::new(r, g, b)
+    }
+
+    fn box_clone(&self) -> Box<dyn Texture> {
+        Box::new((*self).clone())
+    }
+}
