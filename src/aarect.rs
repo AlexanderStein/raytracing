@@ -2,8 +2,8 @@ use cgmath::{Point3, Vector3};
 
 use crate::{aabb::AABB, hitable::*, material::Material};
 
-pub struct XYRect<'a> {
-    pub material: &'a dyn Material,
+pub struct XYRect {
+    pub material: Box<dyn Material>,
     pub x0: f64,
     pub x1: f64,
     pub y0: f64,
@@ -11,7 +11,7 @@ pub struct XYRect<'a> {
     pub k: f64,
 }
 
-impl<'a> Hittable for XYRect<'a> {
+impl Hittable for XYRect {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().z) / ray.direction().z;
         if t < t_min || t > t_max {
@@ -27,7 +27,7 @@ impl<'a> Hittable for XYRect<'a> {
         let mut record = HitRecord {
             p: ray.at(t),
             normal: outward_normal,
-            material: self.material,
+            material: self.material.as_ref(),
             t: t,
             u: (x-self.x0)/(self.x1-self.x0),
             v: (y-self.y0)/(self.y1-self.y0),
