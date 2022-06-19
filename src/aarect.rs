@@ -1,6 +1,5 @@
-use cgmath::{Point3, Vector3};
-
 use crate::{aabb::AABB, hitable::*, material::Material};
+use cgmath::{Point3, Vector3};
 
 pub struct XYRect {
     pub material: Box<dyn Material>,
@@ -17,8 +16,8 @@ impl Hittable for XYRect {
         if t < t_min || t > t_max {
             return None;
         }
-        let x = ray.origin().x + t*ray.direction().x;
-        let y = ray.origin().y + t*ray.direction().y;
+        let x = ray.origin().x + t * ray.direction().x;
+        let y = ray.origin().y + t * ray.direction().y;
         if x < self.x0 || x > self.x1 || y < self.y0 || y > self.y1 {
             return None;
         }
@@ -29,8 +28,8 @@ impl Hittable for XYRect {
             normal: outward_normal,
             material: self.material.as_ref(),
             t: t,
-            u: (x-self.x0)/(self.x1-self.x0),
-            v: (y-self.y0)/(self.y1-self.y0),
+            u: (x - self.x0) / (self.x1 - self.x0),
+            v: (y - self.y0) / (self.y1 - self.y0),
             front_face: false,
         };
         record.set_face_normal(ray, outward_normal);
