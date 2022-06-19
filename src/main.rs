@@ -87,83 +87,104 @@ fn main() {
     const MAX_DEPTH: usize = 50;
 
     // World
-    let (world, lookfrom, lookat, vfov, aperture) = match matches.value_of_t("world").unwrap() {
-        1 => {
-            let lookfrom = Point3 {
-                x: 13.0,
-                y: 2.0,
-                z: 3.0,
-            };
-            let lookat = Point3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            };
-            let vfov = 20.0;
-            let aperture = 0.0;
+    let (world, lookfrom, lookat, vfov, aperture, background) =
+        match matches.value_of_t("world").unwrap() {
+            1 => {
+                let lookfrom = Point3 {
+                    x: 13.0,
+                    y: 2.0,
+                    z: 3.0,
+                };
+                let lookat = Point3 {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                };
+                let vfov = 20.0;
+                let aperture = 0.0;
+                let background = Color::new(0.70, 0.80, 1.00);
 
-            (two_spheres(&mut rng), lookfrom, lookat, vfov, aperture)
-        }
-        2 => {
-            let lookfrom = Point3 {
-                x: 13.0,
-                y: 2.0,
-                z: 3.0,
-            };
-            let lookat = Point3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            };
-            let vfov = 20.0;
-            let aperture = 0.0;
+                (
+                    two_spheres(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
+            2 => {
+                let lookfrom = Point3 {
+                    x: 13.0,
+                    y: 2.0,
+                    z: 3.0,
+                };
+                let lookat = Point3 {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                };
+                let vfov = 20.0;
+                let aperture = 0.0;
+                let background = Color::new(0.70, 0.80, 1.00);
 
-            (
-                two_perlin_spheres(&mut rng),
-                lookfrom,
-                lookat,
-                vfov,
-                aperture,
-            )
-        }
-        3 => {
-            let lookfrom = Point3 {
-                x: 13.0,
-                y: 2.0,
-                z: 3.0,
-            };
-            let lookat = Point3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            };
-            let vfov = 20.0;
-            let aperture = 0.0;
+                (
+                    two_perlin_spheres(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
+            3 => {
+                let lookfrom = Point3 {
+                    x: 13.0,
+                    y: 2.0,
+                    z: 3.0,
+                };
+                let lookat = Point3 {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                };
+                let vfov = 20.0;
+                let aperture = 0.0;
+                let background = Color::new(0.70, 0.80, 1.00);
 
-            (
-                earth(&mut rng),
-                lookfrom,
-                lookat,
-                vfov,
-                aperture,
-            )
-        }
-        _ => {
-            let lookfrom = Point3 {
-                x: 13.0,
-                y: 2.0,
-                z: 3.0,
-            };
-            let lookat = Point3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            };
-            let vfov = 20.0;
-            let aperture = 0.1;
-            (random_scene(&mut rng), lookfrom, lookat, vfov, aperture)
-        }
-    };
+                (
+                    earth(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
+            _ => {
+                let lookfrom = Point3 {
+                    x: 13.0,
+                    y: 2.0,
+                    z: 3.0,
+                };
+                let lookat = Point3 {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                };
+                let vfov = 20.0;
+                let aperture = 0.1;
+                let background = Color::new(0.70, 0.80, 1.00);
+                (
+                    random_scene(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
+        };
 
     // Camera
     let vup = Vector3 {
