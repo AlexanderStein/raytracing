@@ -80,7 +80,7 @@ impl NoiseTexture {
 
 impl Texture for NoiseTexture {
     fn value(&self, p: &Point3<f64>) -> Color {
-        color::white() * 0.5 * (1.0 + self.noise.noise(&(self.scale * *p)))
+        color::white() * self.noise.turb(&(self.scale * *p), 7)
     }
 
     fn box_clone(&self) -> Box<dyn Texture> {
