@@ -56,7 +56,7 @@ pub struct XZRect {
 
 impl Hittable for XZRect {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
-        let t = (self.k - ray.origin().z) / ray.direction().z;
+        let t = (self.k - ray.origin().y) / ray.direction().y;
         if t < t_min || t > t_max {
             return None;
         }
@@ -100,7 +100,7 @@ pub struct YZRect {
 
 impl Hittable for YZRect {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
-        let t = (self.k - ray.origin().z) / ray.direction().z;
+        let t = (self.k - ray.origin().x) / ray.direction().x;
         if t < t_min || t > t_max {
             return None;
         }
