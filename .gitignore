@@ -1,5 +1,6 @@
 /target
 *.json
 *.png
+!earthmap.png
 plot.html
 .venv

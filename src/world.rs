@@ -164,3 +164,22 @@ pub fn two_perlin_spheres(rng: &mut dyn RngCore) -> HitableList {
 
     world
 }
+
+pub fn earth(_rng: &mut dyn RngCore) -> HitableList {
+    let mut world = HitableList::new();
+    let image = image::open("earthmap.png").expect("image not found").to_rgb8();
+    let (width, height) = image.dimensions();
+    let data = image.into_raw();
+    let earth_texture = Box::new(ImageTexture::new(data, width as usize, height as usize));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+        2.0,
+        Box::new(Lambertian::new(earth_texture)),
+    ));
+
+    world
+}
