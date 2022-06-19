@@ -1,6 +1,8 @@
+use crate::perlin::Perlin;
 use cgmath::Point3;
+use rand::RngCore;
 
-use crate::color::Color;
+use crate::color::{self, Color};
 
 pub trait Texture: Send + Sync {
     fn value(&self, p: &Point3<f64>) -> Color;
@@ -54,6 +56,29 @@ impl Texture for CheckerTexture {
         } else {
             self.even.value(p)
         }
+    }
+
+    fn box_clone(&self) -> Box<dyn Texture> {
+        Box::new((*self).clone())
+    }
+}
+
+#[derive(Clone)]
+pub struct NoiseTexture {
+    noise: Perlin,
+}
+
+impl NoiseTexture {
+    pub fn new(rng: &mut dyn RngCore) -> Self {
+        Self {
+            noise: Perlin::new(rng),
+        }
+    }
+}
+
+impl Texture for NoiseTexture {
+    fn value(&self, p: &Point3<f64>) -> Color {
+        color::white() * self.noise.noise(p)
     }
 
     fn box_clone(&self) -> Box<dyn Texture> {
