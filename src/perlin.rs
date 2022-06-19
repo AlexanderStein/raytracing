@@ -81,7 +81,7 @@ impl Perlin {
             })
         });
 
-        return trilinear_interp(&c, u, v, w);
+        trilinear_interp(&c, u, v, w)
     }
 
     pub fn turb(&self, p: &Point3<f64>, depth: usize) -> f64 {
