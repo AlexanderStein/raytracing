@@ -110,7 +110,7 @@ impl Hittable for YZRect {
             return None;
         }
 
-        let outward_normal = Vector3::new(0.0, 0.0, 1.0);
+        let outward_normal = Vector3::new(1.0, 0.0, 0.0);
         let mut record = HitRecord {
             p: ray.at(t),
             normal: outward_normal,
