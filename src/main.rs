@@ -161,6 +161,30 @@ fn main() {
                     background,
                 )
             }
+            4 => {
+                let lookfrom = Point3 {
+                    x: 13.0,
+                    y: 2.0,
+                    z: 3.0,
+                };
+                let lookat = Point3 {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                };
+                let vfov = 20.0;
+                let aperture = 0.0;
+                let background = color::black();
+
+                (
+                    world::empty(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
             _ => {
                 let lookfrom = Point3 {
                     x: 13.0,

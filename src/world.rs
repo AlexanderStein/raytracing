@@ -2,6 +2,10 @@ use crate::{color::*, hitable_list::HitableList, material::*, sphere::*, texture
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 
+pub fn empty(rng: &mut dyn RngCore) -> HitableList {
+    HitableList::new()
+}
+
 pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
     // TODO: Create Vec<Box<dyn Hittable>> first and pass this to world
     let mut world = HitableList::new();
