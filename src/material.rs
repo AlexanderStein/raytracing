@@ -150,6 +150,7 @@ impl Material for Dielectric {
     }
 }
 
+#[derive(Clone)]
 pub struct DiffuseLight {
     emit: Box<dyn Texture>,
 }
