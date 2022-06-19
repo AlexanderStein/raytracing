@@ -149,3 +149,28 @@ impl Material for Dielectric {
         Some((attenuation, scattered))
     }
 }
+
+pub struct DiffuseLight {
+    emit: Box<dyn Texture>,
+}
+
+impl DiffuseLight {
+    pub fn with_texture(texture: &Box<dyn Texture>) -> Self {
+        Self { emit: texture.clone() }
+    }
+
+    pub fn with_color(color: &Color) -> Self {
+        Self { emit: Box::new(SolidColor::new(&color)) }
+    }
+}
+
+impl Material for DiffuseLight {
+    fn scatter(&self, _ray: &Ray, _record: &HitRecord, _rng: &mut dyn RngCore)
+        -> Option<(Color, Ray)> {
+        None
+    }
+
+    fn emitted(&self, u: f64, v: f64, p: &Point3<f64>) -> Color {
+        self.emit.value(u, v, p)
+    }
+}
