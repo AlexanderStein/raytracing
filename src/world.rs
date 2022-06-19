@@ -1,4 +1,4 @@
-use crate::{color::*, hitable_list::HitableList, material::*, sphere::*, texture::*};
+use crate::{color::*, hitable_list::HitableList, material::*, sphere::*, texture::*, aarect::*};
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 
@@ -185,6 +185,42 @@ pub fn earth(_rng: &mut dyn RngCore) -> HitableList {
         2.0,
         Box::new(Lambertian::new(earth_texture)),
     ));
+
+    world
+}
+
+pub fn simple_light(rng: &mut dyn RngCore) -> HitableList {
+    let mut world = HitableList::new();
+
+    let noise = Box::new(NoiseTexture::new(4.0, rng));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: -1000.0,
+            z: 0.0,
+        },
+        1000.0,
+        Box::new(Lambertian::new(noise.clone())),
+    ));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 2.0,
+            z: 0.0,
+        },
+        2.0,
+        Box::new(Lambertian::new(noise)),
+    ));
+
+    let difflight = DiffuseLight::with_color(&Color::new(4.0, 4.0, 4.0));
+    world.push(XYRect {
+        material: Box::new(difflight),
+        x0: 3.0,
+        x1: 5.0,
+        y0: 1.0,
+        y1: 3.0,
+        k: -2.0
+    });
 
     world
 }
