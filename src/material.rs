@@ -1,5 +1,10 @@
-use crate::{color::Color, hitable::HitRecord, ray::Ray, texture::*};
-use cgmath::{InnerSpace, Vector3};
+use crate::{
+    color::{self, Color},
+    hitable::HitRecord,
+    ray::Ray,
+    texture::*,
+};
+use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 use raytracer::{random_in_unit_sphere, random_unit_vector};
 
@@ -24,6 +29,10 @@ fn refract(uv: Vector3<f64>, n: Vector3<f64>, etai_over_etat: f64) -> Vector3<f6
 pub trait Material: Send + Sync {
     fn scatter(&self, ray: &Ray, record: &HitRecord, rng: &mut dyn RngCore)
         -> Option<(Color, Ray)>;
+
+    fn emitted(&self, _u: f64, _v: f64, _p: &Point3<f64>) -> Color {
+        color::black()
+    }
 }
 
 pub struct Lambertian {
