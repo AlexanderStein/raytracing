@@ -2,7 +2,8 @@ use crate::{color::*, hitable_list::HitableList, material::*, sphere::*, texture
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 
-pub fn empty(rng: &mut dyn RngCore) -> HitableList {
+#[allow(dead_code)]
+pub fn empty(_rng: &mut dyn RngCore) -> HitableList {
     HitableList::new()
 }
 
