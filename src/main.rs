@@ -163,6 +163,7 @@ fn main() {
                 )
             }
             4 => {
+                // Run with -s 400
                 let lookfrom = Point3 {
                     x: 26.0,
                     y: 3.0,
