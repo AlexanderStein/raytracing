@@ -228,7 +228,7 @@ fn main() {
                         let u = (x as f64 + rng.gen_range(0.0..1.0)) / (image_width - 1) as f64;
                         let v = (y as f64 + rng.gen_range(0.0..1.0)) / (image_height - 1) as f64;
                         let ray = camera_ref.get_ray(u, v, &mut rng);
-                        ray.color(world_ref, MAX_DEPTH, &mut rng)
+                        ray.color(&background, world_ref, MAX_DEPTH, &mut rng)
                     })
                     .sum();
                 bar.inc(1);
