@@ -25,9 +25,9 @@ pub struct Perlin {
 impl Perlin {
     pub fn new(rng: &mut dyn RngCore) -> Self {
         let ranfloat = rng
-        .sample_iter(rand::distributions::Standard)
-        .take(POINT_COUNT)
-        .collect();
+            .sample_iter(rand::distributions::Standard)
+            .take(POINT_COUNT)
+            .collect();
 
         Self {
             ranfloat,
