@@ -5,7 +5,7 @@ use rand::RngCore;
 use crate::color::{self, Color};
 
 pub trait Texture: Send + Sync {
-    fn value(&self, p: &Point3<f64>) -> Color;
+    fn value(&self, u: f64, v: f64, p: &Point3<f64>) -> Color;
     fn box_clone(&self) -> Box<dyn Texture>;
 }
 
@@ -27,7 +27,7 @@ impl SolidColor {
 }
 
 impl Texture for SolidColor {
-    fn value(&self, _: &Point3<f64>) -> Color {
+    fn value(&self, _: f64, _: f64, _: &Point3<f64>) -> Color {
         self.color
     }
 
@@ -49,12 +49,12 @@ impl CheckerTexture {
 }
 
 impl Texture for CheckerTexture {
-    fn value(&self, p: &Point3<f64>) -> Color {
+    fn value(&self, u: f64, v: f64, p: &Point3<f64>) -> Color {
         let sines = f64::sin(10.0 * p.x) * f64::sin(10.0 * p.y) * f64::sin(10.0 * p.z);
         if sines < 0.0 {
-            self.odd.value(p)
+            self.odd.value(u, v, p)
         } else {
-            self.even.value(p)
+            self.even.value(u, v, p)
         }
     }
 
@@ -79,8 +79,10 @@ impl NoiseTexture {
 }
 
 impl Texture for NoiseTexture {
-    fn value(&self, p: &Point3<f64>) -> Color {
-        color::white() * 0.5 * (1.0 + f64::sin(self.scale * p.z + 10.0 * self.noise.turb(&(self.scale * *p), 7)))
+    fn value(&self, _: f64, _: f64, p: &Point3<f64>) -> Color {
+        color::white()
+            * 0.5
+            * (1.0 + f64::sin(self.scale * p.z + 10.0 * self.noise.turb(&(self.scale * *p), 7)))
     }
 
     fn box_clone(&self) -> Box<dyn Texture> {
