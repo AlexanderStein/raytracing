@@ -138,3 +138,29 @@ pub fn two_spheres(_rng: &mut dyn RngCore) -> HitableList {
 
     world
 }
+
+pub fn two_perlin_spheres(rng: &mut dyn RngCore) -> HitableList {
+    let mut world = HitableList::new();
+
+    let noise = Box::new(NoiseTexture::new(rng));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: -1000.0,
+            z: 0.0,
+        },
+        1000.0,
+        Box::new(Lambertian::new(noise.clone())),
+    ));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 2.0,
+            z: 0.0,
+        },
+        2.0,
+        Box::new(Lambertian::new(noise)),
+    ));
+
+    world
+}
