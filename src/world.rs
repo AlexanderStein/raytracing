@@ -110,7 +110,7 @@ pub fn random_scene(rng: &mut dyn RngCore) -> HitableList {
     world
 }
 
-pub fn two_spheres() -> HitableList {
+pub fn two_spheres(_rng: &mut dyn RngCore) -> HitableList {
     let mut world = HitableList::new();
 
     let checker = Box::new(CheckerTexture::new(
