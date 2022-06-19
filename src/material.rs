@@ -161,7 +161,7 @@ impl DiffuseLight {
     }
 
     pub fn with_color(color: &Color) -> Self {
-        Self { emit: Box::new(SolidColor::new(&color)) }
+        Self { emit: Box::new(SolidColor::new(color)) }
     }
 }
 
