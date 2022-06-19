@@ -40,7 +40,7 @@ impl Hittable for XYRect {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
         let minimum = Point3::new(self.x0, self.y0, self.k - 0.0001);
-        let maximum = Point3::new(self.x1, self.y1, self.k - 0.0001);
+        let maximum = Point3::new(self.x1, self.y1, self.k + 0.0001);
         Some(AABB::new(minimum, maximum))
     }
 }
@@ -84,7 +84,7 @@ impl Hittable for XZRect {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
         let minimum = Point3::new(self.x0, self.k - 0.0001, self.z0);
-        let maximum = Point3::new(self.x1, self.k - 0.0001, self.z1);
+        let maximum = Point3::new(self.x1, self.k + 0.0001, self.z1);
         Some(AABB::new(minimum, maximum))
     }
 }
@@ -128,7 +128,7 @@ impl Hittable for YZRect {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
         let minimum = Point3::new(self.k - 0.0001, self.y0, self.z0);
-        let maximum = Point3::new(self.k - 0.0001, self.y1, self.z1);
+        let maximum = Point3::new(self.k + 0.0001, self.y1, self.z1);
         Some(AABB::new(minimum, maximum))
     }
 }
