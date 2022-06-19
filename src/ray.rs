@@ -3,7 +3,7 @@ use crate::{
     hitable::Hittable,
     hitable_list::HitableList,
 };
-use cgmath::{InnerSpace, Point3, Vector3};
+use cgmath::{Point3, Vector3};
 use rand::RngCore;
 
 pub struct Ray {
@@ -37,7 +37,13 @@ impl Ray {
         self.origin + t * self.direction
     }
 
-    pub fn color(&self, background: &Color, world: &HitableList, depth: usize, rng: &mut dyn RngCore) -> Color {
+    pub fn color(
+        &self,
+        background: &Color,
+        world: &HitableList,
+        depth: usize,
+        rng: &mut dyn RngCore,
+    ) -> Color {
         // If we've exceeded the ray bounce limit, no more light is gathered.
         if depth == 0 {
             return color::black();
@@ -50,9 +56,10 @@ impl Ray {
                 let emitted = record.material.emitted(record.u, record.v, &record.p);
                 match record.material.scatter(self, &record, rng) {
                     None => emitted,
-                    Some((attenuation, scattered)) => {
-                        attenuation.zip(scattered.color(background, world, depth - 1, rng), |l, r| l * r)
-                    }
+                    Some((attenuation, scattered)) => attenuation.zip(
+                        scattered.color(background, world, depth - 1, rng),
+                        |l, r| l * r,
+                    ),
                 }
             }
         }
