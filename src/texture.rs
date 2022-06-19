@@ -66,11 +66,13 @@ impl Texture for CheckerTexture {
 #[derive(Clone)]
 pub struct NoiseTexture {
     noise: Perlin,
+    scale: f64,
 }
 
 impl NoiseTexture {
-    pub fn new(rng: &mut dyn RngCore) -> Self {
+    pub fn new(scale: f64, rng: &mut dyn RngCore) -> Self {
         Self {
+            scale,
             noise: Perlin::new(rng),
         }
     }
@@ -78,7 +80,7 @@ impl NoiseTexture {
 
 impl Texture for NoiseTexture {
     fn value(&self, p: &Point3<f64>) -> Color {
-        color::white() * self.noise.noise(p)
+        color::white() * self.noise.noise(&(self.scale * *p))
     }
 
     fn box_clone(&self) -> Box<dyn Texture> {
