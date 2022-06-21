@@ -21,6 +21,7 @@ mod hitable_list;
 mod material;
 mod perlin;
 mod ray;
+mod rotate;
 mod sphere;
 mod texture;
 mod translate;
