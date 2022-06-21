@@ -1,4 +1,7 @@
-use crate::{color::*, hitable_list::HitableList, material::*, sphere::*, texture::*, aarect::*};
+use crate::{
+    aarect::*, color::*, cuboid::Cuboid, hitable_list::HitableList, material::*, sphere::*,
+    texture::*,
+};
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
 
@@ -172,7 +175,9 @@ pub fn two_perlin_spheres(rng: &mut dyn RngCore) -> HitableList {
 
 pub fn earth(_rng: &mut dyn RngCore) -> HitableList {
     let mut world = HitableList::new();
-    let image = image::open("earthmap.png").expect("image not found").to_rgb8();
+    let image = image::open("earthmap.png")
+        .expect("image not found")
+        .to_rgb8();
     let (width, height) = image.dimensions();
     let data = image.into_raw();
     let earth_texture = Box::new(ImageTexture::new(data, width as usize, height as usize));
@@ -218,7 +223,7 @@ pub fn simple_light(rng: &mut dyn RngCore) -> HitableList {
         x1: 5.0,
         y0: 1.0,
         y1: 3.0,
-        k: -2.0
+        k: -2.0,
     });
 
     world
@@ -238,7 +243,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         y1: 555.0,
         z0: 0.0,
         z1: 555.0,
-        k: 555.0
+        k: 555.0,
     });
     world.push(YZRect {
         material: red,
@@ -246,7 +251,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         y1: 555.0,
         z0: 0.0,
         z1: 555.0,
-        k: 0.0
+        k: 0.0,
     });
     world.push(XZRect {
         material: light,
@@ -254,7 +259,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         x1: 343.0,
         z0: 227.0,
         z1: 332.0,
-        k: 554.0
+        k: 554.0,
     });
     world.push(XZRect {
         material: white.clone(),
@@ -262,7 +267,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         x1: 555.0,
         z0: 0.0,
         z1: 555.0,
-        k: 0.0
+        k: 0.0,
     });
     world.push(XZRect {
         material: white.clone(),
@@ -270,15 +275,15 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         x1: 555.0,
         z0: 0.0,
         z1: 555.0,
-        k: 555.0
+        k: 555.0,
     });
     world.push(XYRect {
-        material: white,
+        material: white.clone(),
         x0: 0.0,
         x1: 555.0,
         y0: 0.0,
         y1: 555.0,
-        k: 555.0
+        k: 555.0,
     });
 
     world.push(Cuboid::new(
