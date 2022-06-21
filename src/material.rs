@@ -35,6 +35,7 @@ pub trait Material: Send + Sync {
     }
 }
 
+#[derive(Clone)]
 pub struct Lambertian {
     albedo: Box<dyn Texture>,
 }
@@ -66,6 +67,7 @@ impl Material for Lambertian {
     }
 }
 
+#[derive(Clone)]
 pub struct Metal {
     albedo: Color,
     fuzz: f64,
@@ -102,6 +104,7 @@ impl Material for Metal {
     }
 }
 
+#[derive(Clone)]
 pub struct Dielectric {
     refraction_index: f64,
 }
