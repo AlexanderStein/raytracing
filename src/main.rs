@@ -12,6 +12,7 @@ use rayon::prelude::*;
 
 mod aabb;
 mod aarect;
+mod cuboid;
 mod bvh;
 mod camera;
 mod color;
