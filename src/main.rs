@@ -23,6 +23,7 @@ mod perlin;
 mod ray;
 mod sphere;
 mod texture;
+mod translate;
 mod world;
 
 fn main() {
