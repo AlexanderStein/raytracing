@@ -1,8 +1,8 @@
 use crate::{aabb::AABB, hitable::*, material::Material};
 use cgmath::{Point3, Vector3};
 
-pub struct XYRect {
-    pub material: Box<dyn Material>,
+pub struct XYRect<M: Material> {
+    pub material: M,
     pub x0: f64,
     pub x1: f64,
     pub y0: f64,
@@ -10,7 +10,7 @@ pub struct XYRect {
     pub k: f64,
 }
 
-impl Hittable for XYRect {
+impl<M: Material> Hittable for XYRect<M> {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().z) / ray.direction().z;
         if t < t_min || t > t_max {
@@ -26,7 +26,7 @@ impl Hittable for XYRect {
         let mut record = HitRecord {
             p: ray.at(t),
             normal: outward_normal,
-            material: self.material.as_ref(),
+            material: &self.material,
             t,
             u: (x - self.x0) / (self.x1 - self.x0),
             v: (y - self.y0) / (self.y1 - self.y0),
@@ -45,8 +45,8 @@ impl Hittable for XYRect {
     }
 }
 
-pub struct XZRect {
-    pub material: Box<dyn Material>,
+pub struct XZRect<M: Material> {
+    pub material: M,
     pub x0: f64,
     pub x1: f64,
     pub z0: f64,
@@ -54,7 +54,7 @@ pub struct XZRect {
     pub k: f64,
 }
 
-impl Hittable for XZRect {
+impl<M: Material> Hittable for XZRect<M> {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().y) / ray.direction().y;
         if t < t_min || t > t_max {
@@ -70,7 +70,7 @@ impl Hittable for XZRect {
         let mut record = HitRecord {
             p: ray.at(t),
             normal: outward_normal,
-            material: self.material.as_ref(),
+            material: &self.material,
             t,
             u: (x - self.x0) / (self.x1 - self.x0),
             v: (z - self.z0) / (self.z1 - self.z0),
@@ -89,8 +89,8 @@ impl Hittable for XZRect {
     }
 }
 
-pub struct YZRect {
-    pub material: Box<dyn Material>,
+pub struct YZRect<M: Material> {
+    pub material: M,
     pub y0: f64,
     pub y1: f64,
     pub z0: f64,
@@ -98,7 +98,7 @@ pub struct YZRect {
     pub k: f64,
 }
 
-impl Hittable for YZRect {
+impl<M: Material> Hittable for YZRect<M> {
     fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().x) / ray.direction().x;
         if t < t_min || t > t_max {
@@ -114,7 +114,7 @@ impl Hittable for YZRect {
         let mut record = HitRecord {
             p: ray.at(t),
             normal: outward_normal,
-            material: self.material.as_ref(),
+            material: &self.material,
             t,
             u: (y - self.y0) / (self.y1 - self.y0),
             v: (z - self.z0) / (self.z1 - self.z0),

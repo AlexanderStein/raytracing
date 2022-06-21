@@ -212,9 +212,8 @@ pub fn simple_light(rng: &mut dyn RngCore) -> HitableList {
         Box::new(Lambertian::new(noise)),
     ));
 
-    let difflight = DiffuseLight::with_color(&Color::new(4.0, 4.0, 4.0));
     world.push(XYRect {
-        material: Box::new(difflight),
+        material: DiffuseLight::with_color(&Color::new(4.0, 4.0, 4.0)),
         x0: 3.0,
         x1: 5.0,
         y0: 1.0,
@@ -228,13 +227,13 @@ pub fn simple_light(rng: &mut dyn RngCore) -> HitableList {
 pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
     let mut world = HitableList::new();
 
-    let red = Box::new(SolidColor::new(&Color::new(0.65, 0.05, 0.05)));
-    let white = Box::new(SolidColor::new(&Color::new(0.73, 0.73, 0.73)));
-    let green = Box::new(SolidColor::new(&Color::new(0.12, 0.45, 0.15)));
-    let light = Box::new(DiffuseLight::with_color(&Color::new(15.0, 15.0, 15.0)));
+    let red = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.65, 0.05, 0.05))));
+    let white = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.73, 0.73, 0.73))));
+    let green = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.12, 0.45, 0.15))));
+    let light = DiffuseLight::with_color(&Color::new(15.0, 15.0, 15.0));
 
     world.push(YZRect {
-        material: Box::new(Lambertian::new(green)),
+        material: green,
         y0: 0.0,
         y1: 555.0,
         z0: 0.0,
@@ -242,7 +241,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         k: 555.0
     });
     world.push(YZRect {
-        material: Box::new(Lambertian::new(red)),
+        material: red,
         y0: 0.0,
         y1: 555.0,
         z0: 0.0,
@@ -258,7 +257,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         k: 554.0
     });
     world.push(XZRect {
-        material: Box::new(Lambertian::new(white.clone())),
+        material: white.clone(),
         x0: 0.0,
         x1: 555.0,
         z0: 0.0,
@@ -266,7 +265,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         k: 0.0
     });
     world.push(XZRect {
-        material: Box::new(Lambertian::new(white.clone())),
+        material: white.clone(),
         x0: 0.0,
         x1: 555.0,
         z0: 0.0,
@@ -274,7 +273,7 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         k: 555.0
     });
     world.push(XYRect {
-        material: Box::new(Lambertian::new(white)),
+        material: white,
         x0: 0.0,
         x1: 555.0,
         y0: 0.0,
