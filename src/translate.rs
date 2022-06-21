@@ -20,7 +20,7 @@ impl<H: Hittable> Hittable for Translate<H> {
         t_max: f64,
     ) -> Option<crate::hitable::HitRecord> {
         let moved_ray = Ray::new(ray.origin() - self.offset, ray.direction(), ray.time());
-        self.hitable.hit(ray, t_min, t_max).map(|mut record| {
+        self.hitable.hit(&moved_ray, t_min, t_max).map(|mut record| {
             record.p += self.offset;
             record.set_face_normal(&moved_ray, record.normal);
             record
