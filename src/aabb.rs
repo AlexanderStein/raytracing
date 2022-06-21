@@ -16,8 +16,16 @@ impl AABB {
         self.minimum
     }
 
+    pub fn set_min(&mut self, min: Point3<f64>) {
+        self.minimum = min;
+    }
+
     pub fn max(&self) -> Point3<f64> {
         self.maximum
+    }
+
+    pub fn set_max(&mut self, max: Point3<f64>) {
+        self.maximum = max;
     }
 
     pub fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> bool {
