@@ -281,5 +281,32 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         k: 555.0
     });
 
+    world.push(Cuboid::new(
+        Point3 {
+            x: 130.0,
+            y: 0.0,
+            z: 65.0,
+        },
+        Point3 {
+            x: 295.0,
+            y: 165.0,
+            z: 230.0,
+        },
+        white.clone(),
+    ));
+    world.push(Cuboid::new(
+        Point3 {
+            x: 265.0,
+            y: 0.0,
+            z: 295.0,
+        },
+        Point3 {
+            x: 430.0,
+            y: 330.0,
+            z: 460.0,
+        },
+        white,
+    ));
+
     world
 }
