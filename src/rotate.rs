@@ -20,9 +20,9 @@ impl<H: Hittable> RotateY<H> {
                 z: f64::MAX,
             };
             let mut max = Point3 {
-                x: -f64::MIN,
-                y: -f64::MIN,
-                z: -f64::MIN,
+                x: f64::MIN,
+                y: f64::MIN,
+                z: f64::MIN,
             };
             for i in 0..2 {
                 for j in 0..2 {
