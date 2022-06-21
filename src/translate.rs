@@ -6,6 +6,12 @@ pub struct Translate<H: Hittable> {
     hitable: H,
 }
 
+impl<H: Hittable> Translate<H> {
+    pub fn new(offset: Vector3<f64>, hitable: H) -> Self {
+        Self { offset, hitable }
+    }
+}
+
 impl<H: Hittable> Hittable for Translate<H> {
     fn hit(
         &self,
