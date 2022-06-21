@@ -1,6 +1,6 @@
 use crate::{
-    aarect::*, color::*, cuboid::Cuboid, hitable_list::HitableList, material::*, sphere::*,
-    texture::*,
+    aarect::*, color::*, cuboid::Cuboid, hitable_list::HitableList, material::*, rotate::RotateY,
+    sphere::*, texture::*, translate::Translate,
 };
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
@@ -286,32 +286,52 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         k: 555.0,
     });
 
-    world.push(Cuboid::new(
+    let box1 = Cuboid::new(
         Point3 {
-            x: 130.0,
+            x: 0.0,
             y: 0.0,
-            z: 65.0,
+            z: 0.0,
         },
         Point3 {
-            x: 295.0,
-            y: 165.0,
-            z: 230.0,
+            x: 165.0,
+            y: 330.0,
+            z: 165.0,
         },
         white.clone(),
-    ));
-    world.push(Cuboid::new(
-        Point3 {
+    );
+    let box1 = RotateY::new(box1, 15.0);
+    let box1 = Translate::new(
+        Vector3 {
             x: 265.0,
             y: 0.0,
             z: 295.0,
         },
+        box1,
+    );
+    world.push(box1);
+    let box2 = Cuboid::new(
         Point3 {
-            x: 430.0,
-            y: 330.0,
-            z: 460.0,
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+        Point3 {
+            x: 165.0,
+            y: 165.0,
+            z: 165.0,
         },
         white,
-    ));
+    );
+    let box2 = RotateY::new(box2, -18.0);
+    let box2 = Translate::new(
+        Vector3 {
+            x: 130.0,
+            y: 0.0,
+            z: 65.0,
+        },
+        box2,
+    );
+    world.push(box2);
 
     world
 }
