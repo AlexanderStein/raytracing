@@ -1,6 +1,14 @@
 use crate::{
-    aarect::*, color::*, cuboid::Cuboid, hitable_list::HitableList, material::*, rotate::RotateY,
-    sphere::*, texture::*, translate::Translate,
+    aarect::*,
+    color::{self, *},
+    constant_medium::ConstantMedium,
+    cuboid::Cuboid,
+    hitable_list::HitableList,
+    material::*,
+    rotate::RotateY,
+    sphere::*,
+    texture::*,
+    translate::Translate,
 };
 use cgmath::{InnerSpace, Point3, Vector3};
 use rand::{Rng, RngCore};
@@ -332,6 +340,121 @@ pub fn cornell_box(_rng: &mut dyn RngCore) -> HitableList {
         box2,
     );
     world.push(box2);
+
+    world
+}
+
+pub fn cornell_smoke(_rng: &mut dyn RngCore) -> HitableList {
+    let mut world = HitableList::new();
+
+    let red = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.65, 0.05, 0.05))));
+    let white = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.73, 0.73, 0.73))));
+    let green = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.12, 0.45, 0.15))));
+    let light = DiffuseLight::with_color(&Color::new(7.0, 7.0, 7.0));
+
+    world.push(YZRect {
+        material: green,
+        y0: 0.0,
+        y1: 555.0,
+        z0: 0.0,
+        z1: 555.0,
+        k: 555.0,
+    });
+    world.push(YZRect {
+        material: red,
+        y0: 0.0,
+        y1: 555.0,
+        z0: 0.0,
+        z1: 555.0,
+        k: 0.0,
+    });
+    world.push(XZRect {
+        material: light,
+        x0: 113.0,
+        x1: 443.0,
+        z0: 127.0,
+        z1: 432.0,
+        k: 554.0,
+    });
+    world.push(XZRect {
+        material: white.clone(),
+        x0: 0.0,
+        x1: 555.0,
+        z0: 0.0,
+        z1: 555.0,
+        k: 0.0,
+    });
+    world.push(XZRect {
+        material: white.clone(),
+        x0: 0.0,
+        x1: 555.0,
+        z0: 0.0,
+        z1: 555.0,
+        k: 555.0,
+    });
+    world.push(XYRect {
+        material: white.clone(),
+        x0: 0.0,
+        x1: 555.0,
+        y0: 0.0,
+        y1: 555.0,
+        k: 555.0,
+    });
+
+    let box1 = Cuboid::new(
+        Point3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+        Point3 {
+            x: 165.0,
+            y: 330.0,
+            z: 165.0,
+        },
+        white.clone(),
+    );
+    let box1 = RotateY::new(box1, 15.0);
+    let box1 = Translate::new(
+        Vector3 {
+            x: 265.0,
+            y: 0.0,
+            z: 295.0,
+        },
+        box1,
+    );
+    world.push(ConstantMedium::new(
+        box1,
+        0.01,
+        SolidColor::new(&color::black()),
+    ));
+    let box2 = Cuboid::new(
+        Point3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+        Point3 {
+            x: 165.0,
+            y: 165.0,
+            z: 165.0,
+        },
+        white,
+    );
+    let box2 = RotateY::new(box2, -18.0);
+    let box2 = Translate::new(
+        Vector3 {
+            x: 130.0,
+            y: 0.0,
+            z: 65.0,
+        },
+        box2,
+    );
+    world.push(ConstantMedium::new(
+        box2,
+        0.01,
+        SolidColor::new(&color::white()),
+    ));
 
     world
 }
