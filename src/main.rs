@@ -12,11 +12,11 @@ use rayon::prelude::*;
 
 mod aabb;
 mod aarect;
-mod constant_medium;
-mod cuboid;
 mod bvh;
 mod camera;
 mod color;
+mod constant_medium;
+mod cuboid;
 mod hitable;
 mod hitable_list;
 mod material;
@@ -209,6 +209,31 @@ fn main() {
 
                 (
                     world::cornell_box(&mut rng),
+                    lookfrom,
+                    lookat,
+                    vfov,
+                    aperture,
+                    background,
+                )
+            }
+            6 => {
+                // Run with -s 200 -x 600 -y 600
+                let lookfrom = Point3 {
+                    x: 278.0,
+                    y: 278.0,
+                    z: -800.0,
+                };
+                let lookat = Point3 {
+                    x: 278.0,
+                    y: 278.0,
+                    z: 0.0,
+                };
+                let vfov = 40.0;
+                let aperture = 0.0;
+                let background = color::black();
+
+                (
+                    world::cornell_smoke(&mut rng),
                     lookfrom,
                     lookat,
                     vfov,
