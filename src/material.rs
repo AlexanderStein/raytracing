@@ -160,17 +160,25 @@ pub struct DiffuseLight {
 
 impl DiffuseLight {
     pub fn with_texture(texture: &Box<dyn Texture>) -> Self {
-        Self { emit: texture.clone() }
+        Self {
+            emit: texture.clone(),
+        }
     }
 
     pub fn with_color(color: &Color) -> Self {
-        Self { emit: Box::new(SolidColor::new(color)) }
+        Self {
+            emit: Box::new(SolidColor::new(color)),
+        }
     }
 }
 
 impl Material for DiffuseLight {
-    fn scatter(&self, _ray: &Ray, _record: &HitRecord, _rng: &mut dyn RngCore)
-        -> Option<(Color, Ray)> {
+    fn scatter(
+        &self,
+        _ray: &Ray,
+        _record: &HitRecord,
+        _rng: &mut dyn RngCore,
+    ) -> Option<(Color, Ray)> {
         None
     }
 
@@ -191,13 +199,13 @@ impl Isotropic {
 }
 
 impl Material for Isotropic {
-    fn scatter(&self, ray: &Ray, record: &HitRecord, rng: &mut dyn RngCore)
-        -> Option<(Color, Ray)> {
-        let scattered = Ray::new(
-            record.p,
-            random_in_unit_sphere(rng),
-            ray.time(),
-        );
+    fn scatter(
+        &self,
+        ray: &Ray,
+        record: &HitRecord,
+        rng: &mut dyn RngCore,
+    ) -> Option<(Color, Ray)> {
+        let scattered = Ray::new(record.p, random_in_unit_sphere(rng), ray.time());
         let attenuation = self.albedo.value(record.u, record.v, &record.p);
         Some((attenuation, scattered))
     }
