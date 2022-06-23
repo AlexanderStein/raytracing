@@ -607,7 +607,7 @@ pub fn final_scene(rng: &mut dyn RngCore) -> HitableList {
         Point3 {
             x: 220.0,
             y: 280.0,
-            z: 30.0,
+            z: 300.0,
         },
         80.0,
         Box::new(Lambertian::new(pertext)),
