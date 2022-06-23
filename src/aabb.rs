@@ -32,7 +32,7 @@ impl AABB {
         for a in 0..3 {
             let inv_d = 1.0 / ray.direction()[a];
             let t0 = (self.minimum[a] - ray.origin()[a]) * inv_d;
-            let t1 = (self.minimum[a] - ray.origin()[a]) * inv_d;
+            let t1 = (self.maximum[a] - ray.origin()[a]) * inv_d;
             let (t0, t1) = if inv_d < 0.0 { (t1, t0) } else { (t0, t1) };
             let t_min = t_min.max(t0);
             let t_max = t_max.min(t1);
