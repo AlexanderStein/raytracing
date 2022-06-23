@@ -54,7 +54,7 @@ impl Cuboid {
             k: p1.x,
         });
         sides.push(YZRect {
-            material: material,
+            material,
             y0: p0.y,
             y1: p1.y,
             z0: p0.z,
