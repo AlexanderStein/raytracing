@@ -106,7 +106,7 @@ impl<M: Material> Hittable for YZRect<M> {
         }
         let y = ray.origin().y + t * ray.direction().y;
         let z = ray.origin().z + t * ray.direction().z;
-        if y < self.y0 || y > self.y1 || z < self.z0 || z > self.z1{
+        if y < self.y0 || y > self.y1 || z < self.z0 || z > self.z1 {
             return None;
         }
 

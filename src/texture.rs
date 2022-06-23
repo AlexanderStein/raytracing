@@ -1,8 +1,9 @@
-use crate::perlin::Perlin;
+use crate::{
+    color::{self, Color},
+    perlin::Perlin,
+};
 use cgmath::Point3;
 use rand::RngCore;
-
-use crate::color::{self, Color};
 
 pub trait Texture: Send + Sync {
     fn value(&self, u: f64, v: f64, p: &Point3<f64>) -> Color;
@@ -124,7 +125,11 @@ impl Texture for ImageTexture {
 
         let bytes_per_scanline = BYTES_PER_PIXEL * self.width;
         let index = j * bytes_per_scanline + i * BYTES_PER_PIXEL;
-        let pixel = self.data.as_slice().get(index..index+BYTES_PER_PIXEL).unwrap();
+        let pixel = self
+            .data
+            .as_slice()
+            .get(index..index + BYTES_PER_PIXEL)
+            .unwrap();
         let r = pixel[0] as f64 / 255.0;
         let g = pixel[1] as f64 / 255.0;
         let b = pixel[2] as f64 / 255.0;

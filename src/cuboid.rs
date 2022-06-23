@@ -8,7 +8,11 @@ pub struct Cuboid {
 }
 
 impl Cuboid {
-    pub fn new<M: Material + Clone + 'static>(p0: Point3<f64>, p1: Point3<f64>, material: M) -> Self {
+    pub fn new<M: Material + Clone + 'static>(
+        p0: Point3<f64>,
+        p1: Point3<f64>,
+        material: M,
+    ) -> Self {
         let mut sides = HitableList::new();
 
         sides.push(XYRect {

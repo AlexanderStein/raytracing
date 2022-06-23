@@ -59,12 +59,7 @@ impl<H: Hittable> RotateY<H> {
 }
 
 impl<H: Hittable> Hittable for RotateY<H> {
-    fn hit(
-        &self,
-        ray: &Ray,
-        t_min: f64,
-        t_max: f64,
-    ) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let mut origin = ray.origin();
         let mut direction = ray.direction();
 

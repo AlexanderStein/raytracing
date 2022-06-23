@@ -1,6 +1,6 @@
 use crate::ray::Ray;
 use cgmath::{InnerSpace, Point3, Vector3};
-use rand::{RngCore, Rng};
+use rand::{Rng, RngCore};
 use raytracer::random_in_unit_disk;
 
 pub struct Camera {
@@ -66,6 +66,10 @@ impl Camera {
         let direction =
             self.lower_left_corner + s * self.horizontal + t * self.vertical - self.origin - offset;
 
-        Ray::new(self.origin + offset, direction, rng.gen_range(self.time0..self.time1))
+        Ray::new(
+            self.origin + offset,
+            direction,
+            rng.gen_range(self.time0..self.time1),
+        )
     }
 }

@@ -27,9 +27,17 @@ pub fn random_color(rng: &mut dyn RngCore) -> Color {
 }
 
 pub fn black() -> Color {
-    Color { x: 0.0, y: 0.0, z: 0.0 }
+    Color {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    }
 }
 
 pub fn white() -> Color {
-    Color { x: 1.0, y: 1.0, z: 1.0 }
+    Color {
+        x: 1.0,
+        y: 1.0,
+        z: 1.0,
+    }
 }

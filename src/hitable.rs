@@ -1,4 +1,4 @@
-use crate::{material::Material, ray::*, aabb::AABB};
+use crate::{aabb::AABB, material::Material, ray::*};
 use cgmath::{InnerSpace, Point3, Vector3};
 use std::option::Option;
 
