@@ -1,4 +1,4 @@
-use crate::{hitable::*, material::*, texture::*};
+use crate::{aabb::AABB, hitable::*, material::*, ray::Ray, texture::*};
 use cgmath::{InnerSpace, Vector3};
 use rand::prelude::*;
 
@@ -19,7 +19,7 @@ impl<H: Hittable> ConstantMedium<H> {
 }
 
 impl<H: Hittable> Hittable for ConstantMedium<H> {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let mut rng = thread_rng();
         if let Some(mut rec1) = self.boundary.hit(ray, f64::MIN, f64::MAX) {
             if let Some(mut rec2) = self.boundary.hit(ray, rec1.t + 0.0001, f64::MAX) {
@@ -49,7 +49,7 @@ impl<H: Hittable> Hittable for ConstantMedium<H> {
         None
     }
 
-    fn bounding_box(&self, time0: f64, time1: f64) -> Option<crate::aabb::AABB> {
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
         self.boundary.bounding_box(time0, time1)
     }
 }

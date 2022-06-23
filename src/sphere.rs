@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, material::Material};
+use crate::{aabb::AABB, hitable::*, material::Material, ray::Ray};
 use cgmath::*;
 use std::f64::consts::PI;
 use std::option::Option;
@@ -37,7 +37,7 @@ impl Sphere {
 }
 
 impl Hittable for Sphere {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = ray.origin() - self.center;
         let a = ray.direction().magnitude2();
         let half_b = oc.dot(ray.direction());
@@ -118,7 +118,7 @@ impl MovingSphere {
 }
 
 impl Hittable for MovingSphere {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = ray.origin() - self.center(ray.time());
         let a = ray.direction().magnitude2();
         let half_b = oc.dot(ray.direction());

@@ -1,4 +1,4 @@
-use crate::{aarect::*, hitable_list::*, hitable::*, material::Material, aabb::AABB};
+use crate::{aabb::AABB, aarect::*, hitable::*, hitable_list::*, material::Material, ray::Ray};
 use cgmath::Point3;
 
 pub struct Cuboid {
@@ -71,11 +71,11 @@ impl Cuboid {
 }
 
 impl Hittable for Cuboid {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         self.sides.hit(ray, t_min, t_max)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<crate::aabb::AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
         Some(AABB::new(self.min, self.max))
     }
 }

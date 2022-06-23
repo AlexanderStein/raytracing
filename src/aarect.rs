@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, material::Material};
+use crate::{aabb::AABB, hitable::*, material::Material, ray::Ray};
 use cgmath::{Point3, Vector3};
 
 pub struct XYRect<M: Material> {
@@ -11,7 +11,7 @@ pub struct XYRect<M: Material> {
 }
 
 impl<M: Material> Hittable for XYRect<M> {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().z) / ray.direction().z;
         if t < t_min || t > t_max {
             return None;
@@ -36,7 +36,7 @@ impl<M: Material> Hittable for XYRect<M> {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<crate::aabb::AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
         let minimum = Point3::new(self.x0, self.y0, self.k - 0.0001);
@@ -55,7 +55,7 @@ pub struct XZRect<M: Material> {
 }
 
 impl<M: Material> Hittable for XZRect<M> {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().y) / ray.direction().y;
         if t < t_min || t > t_max {
             return None;
@@ -80,7 +80,7 @@ impl<M: Material> Hittable for XZRect<M> {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<crate::aabb::AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
         // The bounding box must have non-zero width in each dimension, so pad the Y
         // dimension a small amount.
         let minimum = Point3::new(self.x0, self.k - 0.0001, self.z0);
@@ -99,7 +99,7 @@ pub struct YZRect<M: Material> {
 }
 
 impl<M: Material> Hittable for YZRect<M> {
-    fn hit(&self, ray: &crate::ray::Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let t = (self.k - ray.origin().x) / ray.direction().x;
         if t < t_min || t > t_max {
             return None;
@@ -124,7 +124,7 @@ impl<M: Material> Hittable for YZRect<M> {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<crate::aabb::AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
         // The bounding box must have non-zero width in each dimension, so pad the X
         // dimension a small amount.
         let minimum = Point3::new(self.k - 0.0001, self.y0, self.z0);

@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::Hittable, ray::Ray};
+use crate::{aabb::AABB, hitable::*, ray::Ray};
 use cgmath::Point3;
 
 pub struct RotateY<H: Hittable> {
@@ -61,10 +61,10 @@ impl<H: Hittable> RotateY<H> {
 impl<H: Hittable> Hittable for RotateY<H> {
     fn hit(
         &self,
-        ray: &crate::ray::Ray,
+        ray: &Ray,
         t_min: f64,
         t_max: f64,
-    ) -> Option<crate::hitable::HitRecord> {
+    ) -> Option<HitRecord> {
         let mut origin = ray.origin();
         let mut direction = ray.direction();
 
