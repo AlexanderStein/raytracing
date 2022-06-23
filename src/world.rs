@@ -1,5 +1,6 @@
 use crate::{
     aarect::*,
+    bvh::*,
     color::{self, *},
     constant_medium::ConstantMedium,
     cuboid::Cuboid,
@@ -454,6 +455,186 @@ pub fn cornell_smoke(_rng: &mut dyn RngCore) -> HitableList {
         box2,
         0.01,
         SolidColor::new(&color::white()),
+    ));
+
+    world
+}
+
+pub fn final_scene(rng: &mut dyn RngCore) -> HitableList {
+    let mut boxes = HitableList::new();
+
+    let ground = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.48, 0.83, 0.53))));
+    const BOXES_PER_SIDE: usize = 20;
+
+    for i in 0..BOXES_PER_SIDE {
+        for j in 0..BOXES_PER_SIDE {
+            let w = 100.0;
+            let x0 = -1000.0 + i as f64 * w;
+            let z0 = -1000.0 + j as f64 * w;
+            let y0 = 0.0;
+            let x1 = x0 + w;
+            let y1 = rng.gen_range(1.0..101.0);
+            let z1 = z0 + w;
+
+            boxes.push(Cuboid::new(
+                Point3 {
+                    x: x0,
+                    y: y0,
+                    z: z0,
+                },
+                Point3 {
+                    x: x1,
+                    y: y1,
+                    z: z1,
+                },
+                ground.clone(),
+            ));
+        }
+    }
+    let mut world = HitableList::new();
+
+    world.push(BVH::new(boxes.objects, 0.0, 1.0));
+
+    let light = DiffuseLight::with_color(&Color::new(7.0, 7.0, 7.0));
+    world.push(XZRect {
+        material: light,
+        x0: 123.0,
+        x1: 423.0,
+        z0: 147.0,
+        z1: 412.0,
+        k: 554.0,
+    });
+
+    let center1 = Point3 {
+        x: 400.0,
+        y: 400.0,
+        z: 200.0,
+    };
+    let center2 = center1
+        + Vector3 {
+            x: 30.0,
+            y: 0.0,
+            z: 0.0,
+        };
+    let moving_sphere_material = Box::new(Lambertian::new(Box::new(SolidColor::new(&Color::new(
+        0.7, 0.3, 0.1,
+    )))));
+    world.push(MovingSphere::new(
+        center1,
+        center2,
+        0.0,
+        1.0,
+        50.0,
+        moving_sphere_material,
+    ));
+
+    world.push(Sphere::new(
+        Point3 {
+            x: 260.0,
+            y: 150.0,
+            z: 145.0,
+        },
+        50.0,
+        Box::new(Dielectric::new(1.5)),
+    ));
+    world.push(Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 150.0,
+            z: 145.0,
+        },
+        50.0,
+        Box::new(Metal::new(&Color::new(0.8, 0.8, 0.9), 1.0)),
+    ));
+
+    let boundary = Sphere::new(
+        Point3 {
+            x: 360.0,
+            y: 150.0,
+            z: 145.0,
+        },
+        70.0,
+        Box::new(Dielectric::new(1.5)),
+    );
+    world.push(boundary);
+    //TODO: Make Sphere clonable
+    let boundary = Sphere::new(
+        Point3 {
+            x: 360.0,
+            y: 150.0,
+            z: 145.0,
+        },
+        70.0,
+        Box::new(Dielectric::new(1.5)),
+    );
+    world.push(ConstantMedium::new(
+        boundary,
+        0.2,
+        SolidColor::new(&Color::new(0.2, 0.4, 0.9)),
+    ));
+    let boundary = Sphere::new(
+        Point3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+        5000.0,
+        Box::new(Dielectric::new(1.5)),
+    );
+    world.push(ConstantMedium::new(
+        boundary,
+        0.0001,
+        SolidColor::new(&color::white()),
+    ));
+
+    let image = image::open("earthmap.png")
+        .expect("image not found")
+        .to_rgb8();
+    let (width, height) = image.dimensions();
+    let data = image.into_raw();
+    let earth_texture = Box::new(ImageTexture::new(data, width as usize, height as usize));
+    world.push(Sphere::new(
+        Point3 {
+            x: 400.0,
+            y: 200.0,
+            z: 400.0,
+        },
+        100.0,
+        Box::new(Lambertian::new(earth_texture)),
+    ));
+    let pertext = Box::new(NoiseTexture::new(0.1, rng));
+    world.push(Sphere::new(
+        Point3 {
+            x: 220.0,
+            y: 280.0,
+            z: 30.0,
+        },
+        80.0,
+        Box::new(Lambertian::new(pertext)),
+    ));
+
+    let mut boxes = HitableList::new();
+    let white = Lambertian::new(Box::new(SolidColor::new(&Color::new(0.73, 0.73, 0.73))));
+    const NS: usize = 1000;
+    for _ in 0..NS {
+        boxes.push(Sphere::new(
+            Point3 {
+                x: rng.gen_range(0.0..165.0),
+                y: rng.gen_range(0.0..165.0),
+                z: rng.gen_range(0.0..165.0),
+            },
+            10.0,
+            Box::new(white.clone()),
+        ));
+    }
+
+    world.push(Translate::new(
+        Vector3 {
+            x: -100.0,
+            y: 270.0,
+            z: 395.0,
+        },
+        RotateY::new(boxes, 15.0),
     ));
 
     world
