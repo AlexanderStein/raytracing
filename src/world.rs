@@ -637,7 +637,5 @@ pub fn final_scene(rng: &mut dyn RngCore) -> HitableList {
         RotateY::new(boxes, 15.0),
     ));
 
-    let mut world_tree = HitableList::new();
-    world_tree.push(Bvh::new(world.objects, 0.0, 1.0));
-    world_tree
+    world
 }
