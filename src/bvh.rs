@@ -2,16 +2,16 @@ use crate::{aabb::Aabb, hitable::*, ray::Ray};
 use std::cmp::Ordering;
 
 enum BVHNode {
-    Branch { left: Box<BVH>, right: Box<BVH> },
+    Branch { left: Box<Bvh>, right: Box<Bvh> },
     Leaf(Box<dyn Hittable>),
 }
 
-pub struct BVH {
+pub struct Bvh {
     tree: BVHNode,
     bbox: Aabb,
 }
 
-impl BVH {
+impl Bvh {
     pub fn new(mut objects: Vec<Box<dyn Hittable>>, time0: f64, time1: f64) -> Self {
         fn box_compare(
             time0: f64,
@@ -61,7 +61,7 @@ impl BVH {
             1 => {
                 let leaf = objects.pop().unwrap();
                 if let Some(bbox) = leaf.bounding_box(time0, time1) {
-                    BVH {
+                    Bvh {
                         tree: BVHNode::Leaf(leaf),
                         bbox,
                     }
@@ -70,11 +70,11 @@ impl BVH {
                 }
             }
             _ => {
-                let right = BVH::new(objects.drain(len / 2..).collect(), time0, time1);
-                let left = BVH::new(objects, time0, time1);
+                let right = Bvh::new(objects.drain(len / 2..).collect(), time0, time1);
+                let left = Bvh::new(objects, time0, time1);
                 let bbox = Aabb::surrounding_box(&left.bbox, &right.bbox);
 
-                BVH {
+                Bvh {
                     tree: BVHNode::Branch {
                         left: Box::new(left),
                         right: Box::new(right),
@@ -86,7 +86,7 @@ impl BVH {
     }
 }
 
-impl Hittable for BVH {
+impl Hittable for Bvh {
     fn hit(&self, ray: &Ray, t_min: f64, mut t_max: f64) -> Option<HitRecord> {
         if self.bbox.hit(ray, t_min, t_max) {
             match &self.tree {

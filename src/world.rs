@@ -493,7 +493,7 @@ pub fn final_scene(rng: &mut dyn RngCore) -> HitableList {
     }
     let mut world = HitableList::new();
 
-    world.push(BVH::new(boxes.objects, 0.0, 1.0));
+    world.push(Bvh::new(boxes.objects, 0.0, 1.0));
 
     let light = DiffuseLight::with_color(&Color::new(7.0, 7.0, 7.0));
     world.push(XZRect {
@@ -638,6 +638,6 @@ pub fn final_scene(rng: &mut dyn RngCore) -> HitableList {
     ));
 
     let mut world_tree = HitableList::new();
-    world_tree.push(BVH::new(world.objects, 0.0, 1.0));
+    world_tree.push(Bvh::new(world.objects, 0.0, 1.0));
     world_tree
 }
