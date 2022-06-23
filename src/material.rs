@@ -159,12 +159,6 @@ pub struct DiffuseLight {
 }
 
 impl DiffuseLight {
-    pub fn with_texture(texture: &Box<dyn Texture>) -> Self {
-        Self {
-            emit: texture.clone(),
-        }
-    }
-
     pub fn with_color(color: &Color) -> Self {
         Self {
             emit: Box::new(SolidColor::new(color)),
