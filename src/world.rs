@@ -532,7 +532,7 @@ pub fn final_scene(rng: &mut dyn RngCore) -> HitableList {
         Point3 {
             x: 260.0,
             y: 150.0,
-            z: 145.0,
+            z: 45.0,
         },
         50.0,
         Box::new(Dielectric::new(1.5)),
