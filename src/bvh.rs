@@ -30,7 +30,7 @@ impl BVH {
         }
 
         fn axis_range(
-            objects: &Vec<Box<dyn Hittable>>,
+            objects: &[Box<dyn Hittable>],
             time0: f64,
             time1: f64,
             axis: usize,
