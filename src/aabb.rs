@@ -2,14 +2,14 @@ use crate::ray::*;
 use cgmath::Point3;
 
 #[derive(Clone, Copy)]
-pub struct AABB {
+pub struct Aabb {
     minimum: Point3<f64>,
     maximum: Point3<f64>,
 }
 
-impl AABB {
+impl Aabb {
     pub fn new(minimum: Point3<f64>, maximum: Point3<f64>) -> Self {
-        AABB { minimum, maximum }
+        Aabb { minimum, maximum }
     }
 
     pub fn min(&self) -> Point3<f64> {
@@ -43,7 +43,7 @@ impl AABB {
         true
     }
 
-    pub fn surrounding_box(box0: &AABB, box1: &AABB) -> Self {
+    pub fn surrounding_box(box0: &Aabb, box1: &Aabb) -> Self {
         let small = Point3 {
             x: box0.min().x.min(box1.min().x),
             y: box0.min().y.min(box1.min().y),
@@ -54,7 +54,7 @@ impl AABB {
             y: box0.max().y.max(box1.max().y),
             z: box0.max().z.max(box1.max().z),
         };
-        AABB {
+        Aabb {
             minimum: small,
             maximum: big,
         }

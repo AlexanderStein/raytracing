@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, material::*, ray::Ray, texture::*};
+use crate::{aabb::Aabb, hitable::*, material::*, ray::Ray, texture::*};
 use cgmath::{InnerSpace, Vector3};
 use rand::prelude::*;
 
@@ -49,7 +49,7 @@ impl<H: Hittable> Hittable for ConstantMedium<H> {
         None
     }
 
-    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<Aabb> {
         self.boundary.bounding_box(time0, time1)
     }
 }

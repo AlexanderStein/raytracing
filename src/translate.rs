@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, ray::Ray};
+use crate::{aabb::Aabb, hitable::*, ray::Ray};
 use cgmath::Vector3;
 
 pub struct Translate<H: Hittable> {
@@ -27,9 +27,9 @@ impl<H: Hittable> Hittable for Translate<H> {
         })
     }
 
-    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<Aabb> {
         self.hitable
             .bounding_box(time0, time1)
-            .map(|bbox| AABB::new(bbox.min(), bbox.max()))
+            .map(|bbox| Aabb::new(bbox.min(), bbox.max()))
     }
 }

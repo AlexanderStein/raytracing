@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, ray::Ray};
+use crate::{aabb::Aabb, hitable::*, ray::Ray};
 use std::cmp::Ordering;
 
 enum BVHNode {
@@ -8,7 +8,7 @@ enum BVHNode {
 
 pub struct BVH {
     tree: BVHNode,
-    bbox: AABB,
+    bbox: Aabb,
 }
 
 impl BVH {
@@ -72,7 +72,7 @@ impl BVH {
             _ => {
                 let right = BVH::new(objects.drain(len / 2..).collect(), time0, time1);
                 let left = BVH::new(objects, time0, time1);
-                let bbox = AABB::surrounding_box(&left.bbox, &right.bbox);
+                let bbox = Aabb::surrounding_box(&left.bbox, &right.bbox);
 
                 BVH {
                     tree: BVHNode::Branch {
@@ -109,7 +109,7 @@ impl Hittable for BVH {
         }
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<Aabb> {
         Some(self.bbox)
     }
 }

@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, material::Material, ray::Ray};
+use crate::{aabb::Aabb, hitable::*, material::Material, ray::Ray};
 use cgmath::{Point3, Vector3};
 
 pub struct XYRect<M: Material> {
@@ -36,12 +36,12 @@ impl<M: Material> Hittable for XYRect<M> {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<Aabb> {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
         let minimum = Point3::new(self.x0, self.y0, self.k - 0.0001);
         let maximum = Point3::new(self.x1, self.y1, self.k + 0.0001);
-        Some(AABB::new(minimum, maximum))
+        Some(Aabb::new(minimum, maximum))
     }
 }
 
@@ -80,12 +80,12 @@ impl<M: Material> Hittable for XZRect<M> {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<Aabb> {
         // The bounding box must have non-zero width in each dimension, so pad the Y
         // dimension a small amount.
         let minimum = Point3::new(self.x0, self.k - 0.0001, self.z0);
         let maximum = Point3::new(self.x1, self.k + 0.0001, self.z1);
-        Some(AABB::new(minimum, maximum))
+        Some(Aabb::new(minimum, maximum))
     }
 }
 
@@ -124,11 +124,11 @@ impl<M: Material> Hittable for YZRect<M> {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<Aabb> {
         // The bounding box must have non-zero width in each dimension, so pad the X
         // dimension a small amount.
         let minimum = Point3::new(self.k - 0.0001, self.y0, self.z0);
         let maximum = Point3::new(self.k + 0.0001, self.y1, self.z1);
-        Some(AABB::new(minimum, maximum))
+        Some(Aabb::new(minimum, maximum))
     }
 }

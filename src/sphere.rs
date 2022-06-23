@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, hitable::*, material::Material, ray::Ray};
+use crate::{aabb::Aabb, hitable::*, material::Material, ray::Ray};
 use cgmath::*;
 use std::f64::consts::PI;
 use std::option::Option;
@@ -73,8 +73,8 @@ impl Hittable for Sphere {
         Some(record)
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
-        Some(AABB::new(
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<Aabb> {
+        Some(Aabb::new(
             self.center - Vector3::new(self.radius, self.radius, self.radius),
             self.center + Vector3::new(self.radius, self.radius, self.radius),
         ))
@@ -154,15 +154,15 @@ impl Hittable for MovingSphere {
         Some(record)
     }
 
-    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
-        let box0 = AABB::new(
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<Aabb> {
+        let box0 = Aabb::new(
             self.center(time0) - Vector3::new(self.radius, self.radius, self.radius),
             self.center(time0) + Vector3::new(self.radius, self.radius, self.radius),
         );
-        let box1 = AABB::new(
+        let box1 = Aabb::new(
             self.center(time1) - Vector3::new(self.radius, self.radius, self.radius),
             self.center(time1) + Vector3::new(self.radius, self.radius, self.radius),
         );
-        Some(AABB::surrounding_box(&box0, &box1))
+        Some(Aabb::surrounding_box(&box0, &box1))
     }
 }

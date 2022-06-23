@@ -1,4 +1,4 @@
-use crate::{aabb::AABB, material::Material, ray::*};
+use crate::{aabb::Aabb, material::Material, ray::*};
 use cgmath::{InnerSpace, Point3, Vector3};
 use std::option::Option;
 
@@ -25,5 +25,5 @@ impl<'a> HitRecord<'a> {
 
 pub trait Hittable: Send + Sync {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord>;
-    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB>;
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<Aabb>;
 }

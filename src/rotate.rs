@@ -1,11 +1,11 @@
-use crate::{aabb::AABB, hitable::*, ray::Ray};
+use crate::{aabb::Aabb, hitable::*, ray::Ray};
 use cgmath::Point3;
 
 pub struct RotateY<H: Hittable> {
     hitable: H,
     sin_theta: f64,
     cos_theta: f64,
-    bbox: Option<AABB>,
+    bbox: Option<Aabb>,
 }
 
 impl<H: Hittable> RotateY<H> {
@@ -88,7 +88,7 @@ impl<H: Hittable> Hittable for RotateY<H> {
             })
     }
 
-    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, _time0: f64, _time1: f64) -> Option<Aabb> {
         self.bbox
     }
 }

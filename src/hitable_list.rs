@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hitable::{HitRecord, Hittable},
     ray::*,
 };
@@ -33,12 +33,12 @@ impl Hittable for HitableList {
         hit_anything
     }
 
-    fn bounding_box(&self, time0: f64, time1: f64) -> Option<AABB> {
+    fn bounding_box(&self, time0: f64, time1: f64) -> Option<Aabb> {
         match self.objects.first() {
             Some(first) => match first.bounding_box(time0, time1) {
                 Some(obj_box) => self.objects.iter().skip(1).try_fold(obj_box, |acc, obj| {
                     obj.bounding_box(time0, time1)
-                        .map(|bbox| AABB::surrounding_box(&acc, &bbox))
+                        .map(|bbox| Aabb::surrounding_box(&acc, &bbox))
                 }),
                 _ => None,
             },
